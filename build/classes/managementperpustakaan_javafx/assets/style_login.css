@@ -1,0 +1,47 @@
+/* Gradien latar belakang */
+#AnchorPane {
+    -fx-background-color: linear-gradient(to bottom right, #6A82FB, #FC5C7D);
+}
+
+/* Judul */
+.title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+/* Input Field */
+.input-field {
+    -fx-padding: 8px;
+    -fx-font-size: 14px;
+    -fx-background-radius: 5px;
+    -fx-border-radius: 5px;
+    -fx-border-color: #cccccc;
+    -fx-border-width: 1px;
+    -fx-background-color: rgba(255, 255, 255, 0.8);
+}
+
+/* Tombol Login */
+.login-button {
+    -fx-font-size: 14px;
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 8px 20px;
+    -fx-background-radius: 5px;
+    -fx-min-width: 100px;
+    -fx-cursor: hand;
+    -fx-transition: all 0.3s ease;
+}
+
+/* Animasi hover */
+.login-button:hover {
+    -fx-background-color: #45a049;
+}
+
+/* Status Label */
+.status-label {
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}

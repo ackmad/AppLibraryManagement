@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="720.0" prefWidth="1280.0" stylesheets="@assets/style_peminjaman.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="managementperpustakaan_javafx.controller.PeminjamanController">
+    <children>
+        <HBox spacing="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+            <!-- Sidebar -->
+            <VBox prefHeight="720.0" prefWidth="321.0" spacing="10" styleClass="sidebar">
+                <padding>
+                    <Insets bottom="20" left="10" right="10" top="20" />
+                </padding>
+                <Label styleClass="sidebar-title" text="Library System" />
+                <Button fx:id="dashboardBtn" maxWidth="Infinity" onAction="#handleDashboardClick" styleClass="sidebar-button" text="Dashboard" />
+                <Button fx:id="manageBookBtn" maxWidth="Infinity" onAction="#handleManageBooks" styleClass="sidebar-button" text="Managemen Buku" />
+                <Button fx:id="manageMemberBtn" maxWidth="Infinity" onAction="#handleManageMembers" styleClass="sidebar-button" text="Managemen Anggota" />
+                <Button fx:id="manageBorrowBtn" maxWidth="Infinity" onAction="#handleManageBorrowing" styleClass="sidebar-button" text="Pinjaman" />
+                <VBox VBox.vgrow="ALWAYS" />
+                <Button fx:id="logoutBtn" maxWidth="Infinity" onAction="#handleLogout" styleClass="logout-button" text="Keluar" />
+            </VBox>
+
+            <!-- Main Content -->
+            <HBox spacing="20" styleClass="main-content" HBox.hgrow="ALWAYS">
+                <padding>
+                    <Insets bottom="20" left="20" right="20" top="20" />
+                </padding>
+
+                <!-- Left Section - Borrowing Form -->
+                <VBox prefWidth="400" spacing="15" styleClass="form-section">
+                    <Label styleClass="section-title" text="Tambah Peminjaman">
+                        <font>
+                            <Font name="System Bold" size="18.0" />
+                        </font>
+                    </Label>
+
+                    <VBox spacing="10" styleClass="form-container">
+                        <Label text="Nama Peminjam" />
+                        <ComboBox fx:id="memberComboBox" maxWidth="Infinity" promptText="Pilih Anggota" />
+
+                        <Label text="Judul Buku" />
+                        <ComboBox fx:id="bookComboBox" maxWidth="Infinity" promptText="Pilih Buku" />
+
+                        <Label text="Tanggal Peminjaman" />
+                        <DatePicker fx:id="borrowDatePicker" maxWidth="Infinity" />
+
+                        <Label text="Tanggal Pengembalian" />
+                        <DatePicker fx:id="returnDatePicker" maxWidth="Infinity" />
+
+                        <Label styleClass="note-text" text="Maksimal peminjaman 14 hari" />
+                        <Label styleClass="note-text" text="Denda keterlambatan Rp 5.000/hari" />
+
+                        <Button maxWidth="Infinity" onAction="#handleBorrow" styleClass="borrow-button" text="Pinjam Buku" />
+                    </VBox>
+                </VBox>
+
+                <!-- Right Section - Borrowing Table -->
+                <VBox spacing="15" HBox.hgrow="ALWAYS">
+                    <Label styleClass="section-title" text="Data Peminjaman">
+                        <font>
+                            <Font name="System Bold" size="18.0" />
+                        </font>
+                    </Label>
+
+                    <TextField fx:id="searchField" promptText="Cari peminjaman..." styleClass="search-field" />
+
+                    <TableView fx:id="borrowingTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="memberColumn" prefWidth="150" text="Nama Peminjam" />
+                            <TableColumn fx:id="bookColumn" prefWidth="200" text="Judul Buku" />
+                            <TableColumn fx:id="borrowDateColumn" prefWidth="120" text="Tanggal Pinjam" />
+                            <TableColumn fx:id="returnDateColumn" prefWidth="120" text="Tanggal Kembali" />
+                            <TableColumn fx:id="statusColumn" prefWidth="100" text="Status" />
+                        </columns>
+                    </TableView>
+                </VBox>
+            </HBox>
+        </HBox>
+    </children>
+</AnchorPane>

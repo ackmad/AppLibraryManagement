@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="720.0" prefWidth="1280.0" styleClass="mainFxmlClass" stylesheets="@assets/style_managemembers.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="managementperpustakaan_javafx.controller.ManageMembersController">
+    
+    <children>
+        <HBox spacing="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+            <!-- Sidebar -->
+            <VBox prefHeight="720.0" prefWidth="321.0" spacing="10" styleClass="sidebar">
+                <padding>
+                    <Insets bottom="20" left="10" right="10" top="20" />
+                </padding>
+                <Label styleClass="sidebar-title" text="Library System" />
+                <Button fx:id="dashboardBtn" maxWidth="Infinity" onAction="#handleDashboardClick" styleClass="sidebar-button" text="Dashboard" />
+                <Button fx:id="manageBookBtn" maxWidth="Infinity" onAction="#handleManageBooks" styleClass="sidebar-button" text="Managemen Buku" />
+                <Button fx:id="manageMemberBtn" maxWidth="Infinity" onAction="#handleManageMembers" styleClass="sidebar-button" text="Managemen Anggota" />
+                <Button fx:id="manageBorrowBtn" maxWidth="Infinity" onAction="#handleManageBorrowing" styleClass="sidebar-button" text="Pinjaman" />
+                <VBox VBox.vgrow="ALWAYS" />
+                <Button fx:id="logoutBtn" maxWidth="Infinity" onAction="#handleLogout" styleClass="logout-button" text="Keluar" />
+            </VBox>
+
+            <!-- Main Content -->
+            <VBox styleClass="main-content" HBox.hgrow="ALWAYS">
+                <BorderPane>
+                    <top>
+                        <HBox alignment="CENTER_LEFT" spacing="20" styleClass="top-bar">
+                            <padding>
+                                <Insets bottom="20" left="20" right="20" top="20" />
+                            </padding>
+                            <Label styleClass="page-title" text="Manage Members">
+                                <font>
+                                    <Font name="System Bold" size="24.0" />
+                                </font>
+                            </Label>
+                        </HBox>
+                    </top>
+                    
+                    <center>
+                        <VBox spacing="20" styleClass="content-area">
+                            <padding>
+                                <Insets bottom="20" left="20" right="20" top="20" />
+                            </padding>
+                            
+                            <!-- Search and Action Buttons Area -->
+                            <HBox alignment="CENTER_LEFT" spacing="15" styleClass="action-bar">
+                                <padding>
+                                    <Insets bottom="10" left="10" right="10" top="10" />
+                                </padding>
+                                <TextField fx:id="searchField" promptText="Search members..." styleClass="search-field" />
+                                
+                                <Button fx:id="addButton" onAction="#handleAddMember" styleClass="action-button, add-button" text="Add Member" />
+                                <Button fx:id="deleteButton" onAction="#handleDeleteMember" styleClass="action-button, delete-button" text="Delete" />
+                                <Button fx:id="exportButton" onAction="#handleExportToExcel" styleClass="action-button, export-button" text="Export to Excel" />
+                            </HBox>
+
+                            <!-- Input Fields Area -->
+                            <HBox spacing="10" styleClass="input-area">
+                                <TextField fx:id="namaField" promptText="Nama" styleClass="input-field" />
+                                <TextField fx:id="alamatField" promptText="Alamat" styleClass="input-field" />
+                                <TextField fx:id="nomorHpField" promptText="Nomor HP" styleClass="input-field" />
+                            </HBox>
+                            
+                            <!-- Table Area -->
+                            <TableView fx:id="memberTable" styleClass="member-table" VBox.vgrow="ALWAYS">
+                                <columns>
+                                    <TableColumn fx:id="idColumn" prefWidth="100" text="ID" />
+                                    <TableColumn fx:id="namaColumn" prefWidth="250" text="Nama" />
+                                    <TableColumn fx:id="alamatColumn" prefWidth="300" text="Alamat" />
+                                    <TableColumn fx:id="nomorHpColumn" prefWidth="200" text="Nomor HP" />
+                                </columns>
+                            </TableView>
+                        </VBox>
+                    </center>
+                </BorderPane>
+            </VBox>
+        </HBox>
+    </children>
+</AnchorPane>
