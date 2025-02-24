@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.shape.Line?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+
+<AnchorPane id="AnchorPane" prefHeight="700.0" prefWidth="1000.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="managementperpustakaan_javafx.controller.AddBookController">
+    <stylesheets>
+        <URL value="@assets/style_addbook.css"/>
+    </stylesheets>
+    <children>
+        <VBox spacing="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+            <!-- Header Section -->
+            <HBox styleClass="header-section" alignment="CENTER_LEFT" spacing="15">
+                <padding>
+                    <Insets top="30" right="40" bottom="30" left="40"/>
+                </padding>
+                <FontAwesomeIconView glyphName="BOOK" size="36" styleClass="header-icon"/>
+                <VBox>
+                    <Label text="Tambah Buku Baru" styleClass="header-title">
+                        <font>
+                            <Font name="System Bold" size="24.0"/>
+                        </font>
+                    </Label>
+                    <Label text="Silakan isi informasi buku dengan lengkap" styleClass="header-subtitle"/>
+                </VBox>
+            </HBox>
+
+            <!-- Main Content -->
+            <VBox styleClass="content-section" spacing="30">
+                <padding>
+                    <Insets top="40" right="40" bottom="40" left="40"/>
+                </padding>
+
+                <!-- Form Section -->
+                <GridPane hgap="30" vgap="25">
+                    <columnConstraints>
+                        <ColumnConstraints minWidth="150" prefWidth="200"/>
+                        <ColumnConstraints hgrow="ALWAYS" minWidth="300" prefWidth="400"/>
+                    </columnConstraints>
+
+                    <!-- ID Buku Section -->
+                    <VBox spacing="8" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                        <Label text="ID Buku" styleClass="field-label"/>
+                        <Label text="Masukkan ID unik buku" styleClass="field-description"/>
+                    </VBox>
+                    <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                        <TextField fx:id="idBukuField" styleClass="form-field"/>
+                        <Label text="Contoh: BK001" styleClass="field-helper"/>
+                    </VBox>
+
+                    <!-- Judul Section -->
+                    <VBox spacing="8" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                        <Label text="Judul Buku" styleClass="field-label"/>
+                        <Label text="Masukkan judul lengkap" styleClass="field-description"/>
+                    </VBox>
+                    <TextField fx:id="judulField" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                    <!-- Penulis Section -->
+                    <VBox spacing="8" GridPane.columnIndex="0" GridPane.rowIndex="2">
+                        <Label text="Penulis" styleClass="field-label"/>
+                        <Label text="Nama lengkap penulis" styleClass="field-description"/>
+                    </VBox>
+                    <TextField fx:id="penulisField" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                    <!-- Penerbit Section -->
+                    <VBox spacing="8" GridPane.columnIndex="0" GridPane.rowIndex="3">
+                        <Label text="Penerbit" styleClass="field-label"/>
+                        <Label text="Nama penerbit buku" styleClass="field-description"/>
+                    </VBox>
+                    <TextField fx:id="penerbitField" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+                    <!-- Tahun Terbit Section -->
+                    <VBox spacing="8" GridPane.columnIndex="0" GridPane.rowIndex="4">
+                        <Label text="Tahun Terbit" styleClass="field-label"/>
+                        <Label text="Format: YYYY" styleClass="field-description"/>
+                    </VBox>
+                    <TextField fx:id="tahunTerbitField" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+
+                    <!-- Stok Section -->
+                    <VBox spacing="8" GridPane.columnIndex="0" GridPane.rowIndex="5">
+                        <Label text="Stok" styleClass="field-label"/>
+                        <Label text="Jumlah buku tersedia" styleClass="field-description"/>
+                    </VBox>
+                    <TextField fx:id="stokField" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+                </GridPane>
+
+                <!-- Divider -->
+                <Line styleClass="divider"/>
+
+                <!-- Buttons Section -->
+                <HBox spacing="15" alignment="CENTER_RIGHT">
+                    <Button fx:id="cancelButton" onAction="#handleCancel" styleClass="button-secondary" text="Batal">
+                        <graphic>
+                            <FontAwesomeIconView glyphName="TIMES" size="16"/>
+                        </graphic>
+                    </Button>
+                    <Button fx:id="saveButton" onAction="#handleSave" styleClass="button-primary" text="Simpan">
+                        <graphic>
+                            <FontAwesomeIconView glyphName="CHECK" size="16"/>
+                        </graphic>
+                    </Button>
+                </HBox>
+            </VBox>
+        </VBox>
+    </children>
+</AnchorPane>

@@ -152,7 +152,31 @@ public class ManageBooksController implements Initializable {
     // Method untuk menangani penambahan buku
     @FXML
     private void handleAddBook(ActionEvent event) {
-        // Implementasi logika penambahan buku
+        try {
+            // Load the AddBook.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/managementperpustakaan_javafx/AddBook.fxml"));
+            Parent root = loader.load();
+            
+            // Create new stage for add book window
+            Stage addBookStage = new Stage();
+            addBookStage.setTitle("Tambah Buku Baru");
+            addBookStage.setScene(new Scene(root));
+            
+            // Get the controller
+            AddBookController controller = loader.getController();
+            
+            // Optional: Add a callback when book is added successfully
+            // This will refresh the book table after adding a new book
+            addBookStage.setOnHidden(e -> {
+                loadBooks(); // Refresh the table
+            });
+            
+            // Show the window
+            addBookStage.show();
+            
+        } catch (IOException e) {
+            showAlert("Error", "Gagal membuka form tambah buku: " + e.getMessage());
+        }
     }
     
     // Method untuk menangani penghapusan buku
