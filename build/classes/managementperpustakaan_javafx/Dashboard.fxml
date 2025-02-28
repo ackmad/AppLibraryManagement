@@ -12,12 +12,13 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane id="AnchorPane" prefHeight="600" prefWidth="1000" stylesheets="@assets/style_dashboard.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="managementperpustakaan_javafx.controller.DashboardController">
     <children>
         <HBox spacing="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
             <!-- Sidebar -->
-            <VBox prefWidth="200" spacing="10" styleClass="sidebar">
+            <VBox prefHeight="600.0" prefWidth="215.0" spacing="10" styleClass="sidebar">
                 <padding>
                     <Insets bottom="20" left="10" right="10" top="20" />
                 </padding>
@@ -26,6 +27,7 @@
                 <Button fx:id="manageBookBtn" maxWidth="Infinity" onAction="#handleManageBooks" styleClass="sidebar-button" text="Managemen Buku" />
                 <Button fx:id="manageMemberBtn" maxWidth="Infinity" onAction="#handleManageMembers" styleClass="sidebar-button" text="Managemen Anggota" />
                 <Button fx:id="manageBorrowBtn" maxWidth="Infinity" onAction="#handleManageBorrowing" styleClass="sidebar-button" text="Pinjaman" />
+                <Button fx:id="manageReturnBtn" onAction="#handleManageReturn" styleClass="sidebar-button" text="Pengembalian" />
                 <Region VBox.vgrow="ALWAYS" />
                 <Button fx:id="logoutBtn" maxWidth="Infinity" onAction="#handleLogout" styleClass="logout-button" text="Keluar" />
             </VBox>
@@ -49,25 +51,37 @@
                     
                     <!-- Total Books Card -->
                     <VBox styleClass="card" GridPane.columnIndex="0">
-                        <Label styleClass="card-title" text="Total Buku" />
+                        <Label styleClass="card-title" text="Total Buku">
+                     <font>
+                        <Font size="5.0" />
+                     </font></Label>
                         <Label fx:id="labelJumlahBuku" styleClass="card-value" text="0" />
                     </VBox>
                     
                     <!-- Active Members Card -->
                     <VBox styleClass="card" GridPane.columnIndex="1">
-                        <Label styleClass="card-title" text="Anggota Aktif" />
+                        <Label styleClass="card-title" text="Anggota Aktif">
+                     <font>
+                        <Font size="5.0" />
+                     </font></Label>
                         <Label fx:id="labelAnggotaAktif" styleClass="card-value" text="0" />
                     </VBox>
                     
                     <!-- Borrowed Books Card -->
                     <VBox styleClass="card" GridPane.columnIndex="2">
-                        <Label styleClass="card-title" text="Buku yang di Pinjam" />
+                        <Label styleClass="card-title" text="Buku yang di Pinjam">
+                     <font>
+                        <Font size="5.0" />
+                     </font></Label>
                         <Label fx:id="labelBukuDipinjam" styleClass="card-value" text="0" />
                     </VBox>
                     
                     <!-- Total Fines Card -->
                     <VBox styleClass="card" GridPane.columnIndex="3">
-                        <Label styleClass="card-title" text="Total Denda" />
+                        <Label styleClass="card-title" text="Total Denda">
+                     <font>
+                        <Font size="5.0" />
+                     </font></Label>
                         <Label fx:id="labelTotalDenda" styleClass="card-value" text="Rp 0" />
                     </VBox>
                <rowConstraints>
@@ -77,7 +91,7 @@
                 
                 <!-- Recent Activities Section -->
                 <VBox spacing="10" styleClass="recent-activities">
-                    <Label styleClass="section-title" text="Anggota" />
+                    <Label prefWidth="188.0" styleClass="section-title" text="Anggota" />
                     <TableView fx:id="recentActivitiesTable" VBox.vgrow="ALWAYS">
                         <columns>
                             <TableColumn fx:id="dateColumn" prefWidth="150" text="Date" />

@@ -53,6 +53,9 @@ public class PeminjamanController implements Initializable {
     private Button logoutBtn;
     
     @FXML
+    private Button manageReturnBtn;
+    
+    @FXML
     private ComboBox<String> memberComboBox;
     
     @FXML
@@ -283,6 +286,19 @@ public class PeminjamanController implements Initializable {
     @FXML
     private void handleLogout(ActionEvent event) throws IOException {
         loadPage(event, "/managementperpustakaan_javafx/Login.fxml");
+    }
+    
+    @FXML
+    private void handleManageReturn(ActionEvent event) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/managementperpustakaan_javafx/Pengembalian.fxml"));
+            Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     
     private void loadPage(ActionEvent event, String fxml) throws IOException {

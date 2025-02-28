@@ -24,6 +24,7 @@ public class DashboardController implements Initializable {
     @FXML private Label labelAnggotaAktif;
     @FXML private Label labelBukuDipinjam;
     @FXML private Label labelTotalDenda;
+    @FXML private Button manageReturnBtn;
     
     @FXML private TableView<RecentActivity> recentActivitiesTable;
     @FXML private TableColumn<RecentActivity, String> dateColumn;
@@ -137,6 +138,15 @@ public class DashboardController implements Initializable {
 
     @FXML
     private void handleManageBorrowing(ActionEvent event) {
+        try {
+            loadScene(event, "/managementperpustakaan_javafx/Peminjaman.fxml", "Manage Borrowing");
+        } catch (Exception e) {
+            showAlert("Error", "Failed to load Manage Borrowing page: " + e.getMessage());
+        }
+    }
+
+    @FXML
+    private void handleManageReturn(ActionEvent event) {
         try {
             loadScene(event, "/managementperpustakaan_javafx/Peminjaman.fxml", "Manage Borrowing");
         } catch (Exception e) {

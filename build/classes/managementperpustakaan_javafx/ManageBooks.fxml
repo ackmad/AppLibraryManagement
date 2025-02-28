@@ -2,18 +2,20 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="720.0" prefWidth="1280.0" styleClass="mainFxmlClass" stylesheets="@assets/style_managebooks.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="managementperpustakaan_javafx.controller.ManageBooksController">
-    
+<AnchorPane id="AnchorPane" prefHeight="720.0" prefWidth="1280.0" styleClass="mainFxmlClass" stylesheets="@assets/style_managebooks.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="managementperpustakaan_javafx.controller.ManageBooksController">
     <children>
         <HBox spacing="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
             <!-- Sidebar -->
@@ -21,11 +23,12 @@
                 <padding>
                     <Insets bottom="20" left="10" right="10" top="20" />
                 </padding>
-                <Label styleClass="sidebar-title" text="Library System" />
+                <Label styleClass="sidebar-title" text="Perpustakaan Kita" />
                 <Button fx:id="dashboardBtn" maxWidth="Infinity" onAction="#handleDashboardClick" styleClass="sidebar-button" text="Dashboard" />
                 <Button fx:id="manageBookBtn" maxWidth="Infinity" onAction="#handleManageBooks" styleClass="sidebar-button" text="Managemen Buku" />
                 <Button fx:id="manageMemberBtn" maxWidth="Infinity" onAction="#handleManageMembers" styleClass="sidebar-button" text="Managemen Anggota" />
                 <Button fx:id="manageBorrowBtn" maxWidth="Infinity" onAction="#handleManageBorrowing" styleClass="sidebar-button" text="Pinjaman" />
+                <Button fx:id="manageReturnBtn" onAction="#handleManageReturn" styleClass="sidebar-button" text="Pengembalian" />
                 <VBox VBox.vgrow="ALWAYS" />
                 <Button fx:id="logoutBtn" maxWidth="Infinity" onAction="#handleLogout" styleClass="logout-button" text="Keluar" />
             </VBox>
@@ -57,11 +60,16 @@
                                 <padding>
                                     <Insets bottom="10" left="10" right="10" top="10" />
                                 </padding>
-                                <TextField fx:id="searchField" onKeyReleased="#handleSearch" promptText="Search books..." styleClass="search-field" />
+                                <HBox spacing="10" alignment="CENTER_LEFT">
+                                    <TextField fx:id="searchField" onKeyReleased="#handleSearch" promptText="Search books..." styleClass="search-field" />
+                                    <ComboBox fx:id="searchCriteria" styleClass="search-combo" promptText="Search by..." />
+                                </HBox>
                                 
-                                <Button fx:id="addButton" onAction="#handleAddBook" styleClass="action-button, add-button" text="Add Book" />
-                                <Button fx:id="deleteButton" onAction="#handleDeleteBook" styleClass="action-button, delete-button" text="Delete" />
-                                <Button fx:id="exportButton" onAction="#handleExportToExcel" styleClass="action-button, export-button" text="Export to Excel" />
+                                <HBox spacing="10" HBox.hgrow="ALWAYS" alignment="CENTER_RIGHT">
+                                    <Button fx:id="addButton" onAction="#handleAddBook" styleClass="action-button, add-button" text="Add Book" />
+                                    <Button fx:id="deleteButton" onAction="#handleDeleteBook" styleClass="action-button, delete-button" text="Delete" />
+                                    <Button fx:id="exportButton" onAction="#handleExportToPDF" styleClass="action-button, export-button" text="Export PDF" />
+                                </HBox>
                             </HBox>
                             
                             <!-- Table Area -->

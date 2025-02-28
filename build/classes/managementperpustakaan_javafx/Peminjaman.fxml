@@ -22,11 +22,13 @@
                 <padding>
                     <Insets bottom="20" left="10" right="10" top="20" />
                 </padding>
-                <Label styleClass="sidebar-title" text="Library System" />
+                <Label styleClass="sidebar-title" text="Perpustakaan Kita" />
                 <Button fx:id="dashboardBtn" maxWidth="Infinity" onAction="#handleDashboardClick" styleClass="sidebar-button" text="Dashboard" />
                 <Button fx:id="manageBookBtn" maxWidth="Infinity" onAction="#handleManageBooks" styleClass="sidebar-button" text="Managemen Buku" />
                 <Button fx:id="manageMemberBtn" maxWidth="Infinity" onAction="#handleManageMembers" styleClass="sidebar-button" text="Managemen Anggota" />
                 <Button fx:id="manageBorrowBtn" maxWidth="Infinity" onAction="#handleManageBorrowing" styleClass="sidebar-button" text="Pinjaman" />
+                <Button fx:id="manageReturnBtn" onAction="#handleManageReturn" styleClass="sidebar-button" text="Pengembalian" />
+
                 <VBox VBox.vgrow="ALWAYS" />
                 <Button fx:id="logoutBtn" maxWidth="Infinity" onAction="#handleLogout" styleClass="logout-button" text="Keluar" />
             </VBox>

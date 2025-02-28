@@ -64,6 +64,9 @@ public class ManageMembersController implements Initializable {
     @FXML
     private Button exportButton;
 
+    @FXML 
+    private Button manageReturnBtn;
+
     @FXML private TableColumn<Anggota, Integer> idColumn;
     @FXML private TableColumn<Anggota, String> namaColumn;
     @FXML private TableColumn<Anggota, String> alamatColumn;
@@ -143,6 +146,19 @@ public class ManageMembersController implements Initializable {
     private void handleLogout(ActionEvent event) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/managementperpustakaan_javafx/Login.fxml"));
+            Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    @FXML
+    private void handleManageReturn(ActionEvent event) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/managementperpustakaan_javafx/Pengembalian.fxml"));
             Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             Scene scene = new Scene(root);
             stage.setScene(scene);

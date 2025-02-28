@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
 import java.util.ResourceBundle;
+import java.util.stream.Stream;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -26,6 +27,13 @@ import javafx.stage.Stage;
 import javafx.scene.control.cell.PropertyValueFactory;
 import managementperpustakaan_javafx.controller.Koneksi;
 import managementperpustakaan_javafx.model.Buku;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.MenuButton;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.*;
+import javafx.stage.FileChooser;
+import java.io.File;
+import java.io.FileOutputStream;
 
 /**
  * FXML Controller class
@@ -64,6 +72,9 @@ public class ManageBooksController implements Initializable {
     @FXML
     private Button exportButton;
 
+    @FXML 
+    private Button manageReturnBtn;
+
     @FXML private TableColumn<Buku, Integer> idColumn;
     @FXML private TableColumn<Buku, String> judulColumn;
     @FXML private TableColumn<Buku, String> penulisColumn;
@@ -71,12 +82,16 @@ public class ManageBooksController implements Initializable {
     @FXML private TableColumn<Buku, Integer> tahunColumn;
     @FXML private TableColumn<Buku, Integer> stokColumn;
 
+    @FXML
+    private ComboBox<String> searchCriteria;
+
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         setupTable();
+        setupSearchCriteria();
         loadBooks();
         
         // Add search listener
@@ -142,6 +157,19 @@ public class ManageBooksController implements Initializable {
         }
     }
     
+    @FXML
+    private void handleManageReturn(ActionEvent event) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/managementperpustakaan_javafx/Pengembalian.fxml"));
+            Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
     // Method untuk menangani pencarian buku
     @FXML
     private void handleSearch() {
@@ -185,10 +213,61 @@ public class ManageBooksController implements Initializable {
         // Implementasi logika penghapusan buku
     }
     
-    // Method untuk menangani export ke Excel
+    // Method untuk menangani export ke PDF
     @FXML
-    private void handleExportToExcel(ActionEvent event) {
-        // Implementasi logika export ke Excel
+    private void handleExportToPDF(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save PDF File");
+        fileChooser.getExtensionFilters().add(
+            new FileChooser.ExtensionFilter("PDF files (*.pdf)", "*.pdf")
+        );
+        
+        File file = fileChooser.showSaveDialog(null);
+        if (file != null) {
+            try {
+                Document document = new Document(PageSize.A4.rotate());
+                PdfWriter.getInstance(document, new FileOutputStream(file));
+                document.open();
+                
+                // Add title
+                Font titleFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18);
+                Paragraph title = new Paragraph("Books Report", titleFont);
+                title.setAlignment(Element.ALIGN_CENTER);
+                document.add(title);
+                document.add(new Paragraph("\n"));
+                
+                // Create table
+                PdfPTable table = new PdfPTable(6); // 6 columns
+                table.setWidthPercentage(100);
+                
+                // Add header cells
+                String[] headers = {"ID", "Title", "Author", "Publisher", "Year", "Stock"};
+                for (String header : headers) {
+                    PdfPCell cell = new PdfPCell(new Phrase(header));
+                    cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+                    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    cell.setPadding(5);
+                    table.addCell(cell);
+                }
+                
+                // Add data rows
+                for (Buku book : bookTable.getItems()) {
+                    table.addCell(String.valueOf(book.getIdBuku()));
+                    table.addCell(book.getJudul());
+                    table.addCell(book.getPenulis());
+                    table.addCell(book.getPenerbit());
+                    table.addCell(String.valueOf(book.getTahunTerbit()));
+                    table.addCell(String.valueOf(book.getStok()));
+                }
+                
+                document.add(table);
+                document.close();
+                
+                showSuccessAlert("Export Successful", "Data has been exported to PDF successfully!");
+            } catch (Exception e) {
+                showAlert("Export Error", "Failed to export data: " + e.getMessage());
+            }
+        }
     }
 
     private void setupTable() {
@@ -200,6 +279,18 @@ public class ManageBooksController implements Initializable {
         stokColumn.setCellValueFactory(new PropertyValueFactory<>("stok"));
     }
 
+    private void setupSearchCriteria() {
+        searchCriteria.getItems().addAll(
+            "All",
+            "ID",
+            "Title",
+            "Author",
+            "Publisher",
+            "Year"
+        );
+        searchCriteria.setValue("All"); // Set default value
+    }
+
     private void loadBooks() {
         loadBooks("");
     }
@@ -207,15 +298,20 @@ public class ManageBooksController implements Initializable {
     private void loadBooks(String search) {
         ObservableList<Buku> books = FXCollections.observableArrayList();
         
-        String query = "SELECT * FROM buku WHERE judul LIKE ? OR penulis LIKE ? OR penerbit LIKE ?";
+        String searchBy = searchCriteria.getValue();
+        String query = buildSearchQuery(searchBy);
         
         try (Connection conn = Koneksi.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
             
             String searchTerm = "%" + search + "%";
-            pstmt.setString(1, searchTerm);
-            pstmt.setString(2, searchTerm);
-            pstmt.setString(3, searchTerm);
+            if (searchBy.equals("All")) {
+                pstmt.setString(1, searchTerm);
+                pstmt.setString(2, searchTerm);
+                pstmt.setString(3, searchTerm);
+            } else {
+                pstmt.setString(1, searchTerm);
+            }
             
             ResultSet rs = pstmt.executeQuery();
             
@@ -233,12 +329,37 @@ public class ManageBooksController implements Initializable {
             bookTable.setItems(books);
             
         } catch (SQLException e) {
-            showAlert("Error", "Gagal memuat data buku: " + e.getMessage());
+            showAlert("Error", "Failed to load books: " + e.getMessage());
+        }
+    }
+
+    private String buildSearchQuery(String searchBy) {
+        switch (searchBy) {
+            case "ID":
+                return "SELECT * FROM buku WHERE CAST(id_buku AS CHAR) LIKE ?";
+            case "Title":
+                return "SELECT * FROM buku WHERE judul LIKE ?";
+            case "Author":
+                return "SELECT * FROM buku WHERE penulis LIKE ?";
+            case "Publisher":
+                return "SELECT * FROM buku WHERE penerbit LIKE ?";
+            case "Year":
+                return "SELECT * FROM buku WHERE CAST(tahun_terbit AS CHAR) LIKE ?";
+            default:
+                return "SELECT * FROM buku WHERE judul LIKE ? OR penulis LIKE ? OR penerbit LIKE ?";
         }
     }
 
     private void showAlert(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
+
+    private void showSuccessAlert(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(content);
