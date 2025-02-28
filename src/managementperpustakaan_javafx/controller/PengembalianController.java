@@ -5,25 +5,17 @@
 package managementperpustakaan_javafx.controller;
 
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
-import java.sql.Date;
 import java.util.ResourceBundle;
-import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import managementperpustakaan_javafx.model.Pengembalian;
-import managementperpustakaan_javafx.controller.Koneksi;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
-import java.io.IOException;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 /**
  * FXML Controller class
@@ -31,246 +23,88 @@ import java.io.IOException;
  * @author ackmadelfanp
  */
 public class PengembalianController implements Initializable {
-    @FXML private TextField searchField;
-    @FXML private Button searchButton;
-    @FXML private TableView<Pengembalian> borrowedBooksTable;
-    @FXML private TableColumn<Pengembalian, Integer> memberIdColumn;
-    @FXML private TableColumn<Pengembalian, String> memberNameColumn;
-    @FXML private TableColumn<Pengembalian, String> bookTitleColumn;
-    @FXML private TableColumn<Pengembalian, LocalDate> borrowDateColumn;
-    @FXML private TableColumn<Pengembalian, LocalDate> dueDateColumn;
-    @FXML private TableColumn<Pengembalian, Integer> fineColumn;
-    @FXML private Button returnButton;
-    @FXML private Button dashboardBtn;
-    @FXML private Button manageBookBtn;
-    @FXML private Button manageMemberBtn;
-    @FXML private Button manageBorrowBtn;
-    @FXML private Button logoutBtn;
-    @FXML private Button manageReturnBtn;
 
-    private Connection connection;
+    @FXML
+    private TableView<Pengembalian> returnTable; // Tipe data yang sesuai
+    @FXML
+    private Button kembalikanBtn;
+
+    private ObservableList<Pengembalian> returnData; // Data untuk tabel
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        connection = Koneksi.getConnection();
-
-        // Initialize table columns
-        memberIdColumn.setCellValueFactory(new PropertyValueFactory<>("idPeminjaman"));
-        memberNameColumn.setCellValueFactory(new PropertyValueFactory<>("namaPeminjam"));
-        bookTitleColumn.setCellValueFactory(new PropertyValueFactory<>("judulBuku"));
-        borrowDateColumn.setCellValueFactory(new PropertyValueFactory<>("tanggalPeminjaman"));
-        dueDateColumn.setCellValueFactory(new PropertyValueFactory<>("tanggalPengembalian"));
-        fineColumn.setCellValueFactory(new PropertyValueFactory<>("denda"));
-
-        // Format the fine column to show currency
-        fineColumn.setCellFactory(column -> new TableCell<Pengembalian, Integer>() {
-            @Override
-            protected void updateItem(Integer denda, boolean empty) {
-                super.updateItem(denda, empty);
-                if (empty || denda == null) {
-                    setText(null);
-                } else {
-                    setText(String.format("Rp %,d", denda));
-                }
-            }
-        });
-
-        // Enable return button only when a row is selected
-        borrowedBooksTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            returnButton.setDisable(newSelection == null);
-        });
-
-        loadBorrowedBooks();
+        // Inisialisasi tabel dan data
+        initializeTable();
+        loadReturnData();
     }
 
-    @FXML
-    private void handleSearch() {
-        String searchText = searchField.getText().trim().toLowerCase();
-        if (searchText.isEmpty()) {
-            loadBorrowedBooks();
-            return;
-        }
+    private void initializeTable() {
+        // Mengatur kolom tabel
+        TableColumn<Pengembalian, Integer> idPengembalianColumn = new TableColumn<>("ID Pengembalian");
+        idPengembalianColumn.setCellValueFactory(new PropertyValueFactory<>("idPengembalian"));
 
-        try {
-            String query = "SELECT p.*, pm.nama_peminjam, b.judul " +
-                          "FROM pengembalian p " +
-                          "JOIN peminjaman pm ON p.id_peminjaman = pm.id " +
-                          "JOIN buku b ON pm.id_buku = b.id " +
-                          "WHERE pm.nama_peminjam LIKE ? OR b.judul LIKE ?";
-            
-            PreparedStatement stmt = connection.prepareStatement(query);
-            stmt.setString(1, "%" + searchText + "%");
-            stmt.setString(2, "%" + searchText + "%");
-            
-            ResultSet rs = stmt.executeQuery();
-            borrowedBooksTable.getItems().clear();
-            while (rs.next()) {
-                borrowedBooksTable.getItems().add(createPengembalianFromResultSet(rs));
-            }
-        } catch (SQLException e) {
-            showAlert(Alert.AlertType.ERROR, "Error", "Gagal mencari data");
-            e.printStackTrace();
-        }
+        TableColumn<Pengembalian, Integer> idPeminjamanColumn = new TableColumn<>("ID Peminjaman");
+        idPeminjamanColumn.setCellValueFactory(new PropertyValueFactory<>("idPeminjaman"));
+
+        TableColumn<Pengembalian, Integer> idAnggotaColumn = new TableColumn<>("ID Anggota");
+        idAnggotaColumn.setCellValueFactory(new PropertyValueFactory<>("idAnggota"));
+
+        TableColumn<Pengembalian, Integer> idBukuColumn = new TableColumn<>("ID Buku");
+        idBukuColumn.setCellValueFactory(new PropertyValueFactory<>("idBuku"));
+
+        TableColumn<Pengembalian, String> tanggalPinjamColumn = new TableColumn<>("Tanggal Pinjam");
+        tanggalPinjamColumn.setCellValueFactory(new PropertyValueFactory<>("tanggalPinjam"));
+
+        TableColumn<Pengembalian, String> tanggalJatuhTempoColumn = new TableColumn<>("Tanggal Jatuh Tempo");
+        tanggalJatuhTempoColumn.setCellValueFactory(new PropertyValueFactory<>("tanggalJatuhTempo"));
+
+        TableColumn<Pengembalian, String> tanggalPengembalianColumn = new TableColumn<>("Tanggal Pengembalian");
+        tanggalPengembalianColumn.setCellValueFactory(new PropertyValueFactory<>("tanggalPengembalian"));
+
+        TableColumn<Pengembalian, Double> dendaColumn = new TableColumn<>("Denda");
+        dendaColumn.setCellValueFactory(new PropertyValueFactory<>("denda"));
+
+        TableColumn<Pengembalian, String> statusPengembalianColumn = new TableColumn<>("Status Pengembalian");
+        statusPengembalianColumn.setCellValueFactory(new PropertyValueFactory<>("statusPengembalian"));
+
+        // Menambahkan kolom ke tabel
+        returnTable.getColumns().addAll(idPengembalianColumn, idPeminjamanColumn, idAnggotaColumn, idBukuColumn,
+                tanggalPinjamColumn, tanggalJatuhTempoColumn, tanggalPengembalianColumn, dendaColumn, statusPengembalianColumn);
     }
 
-    @FXML
-    private void handleReturnBook() {
-        Pengembalian selectedBook = borrowedBooksTable.getSelectionModel().getSelectedItem();
-        if (selectedBook == null) return;
-
-        try {
-            // Calculate fine if any
-            LocalDate returnDate = LocalDate.now();
-            LocalDate dueDate = selectedBook.getTanggalPengembalian();
-            double fine = 0.0;
-            
-            if (returnDate.isAfter(dueDate)) {
-                long daysLate = ChronoUnit.DAYS.between(dueDate, returnDate);
-                fine = daysLate * 5000; // Rp 5000 per day
-            }
-
-            // Update the borrowing record
-            String updateQuery = "UPDATE pengembalian SET tanggal_pengembalian = ?, denda = ? WHERE id_pengembalian = ?";
-            PreparedStatement stmt = connection.prepareStatement(updateQuery);
-            stmt.setDate(1, Date.valueOf(returnDate));
-            stmt.setDouble(2, fine);
-            stmt.setInt(3, selectedBook.getIdPengembalian());
-            stmt.executeUpdate();
-
-            // Update book stock
-            String updateBookQuery = "UPDATE buku SET stock = stock + 1 WHERE id = ?";
-            PreparedStatement bookStmt = connection.prepareStatement(updateBookQuery);
-            bookStmt.setInt(1, selectedBook.getIdBuku());
-            bookStmt.executeUpdate();
-
-            // Show success message with fine information
-            String message = "Buku berhasil dikembalikan.";
-            if (fine > 0) {
-                message += "\nDenda keterlambatan: Rp " + String.format("%,.0f", fine);
-            }
-            showAlert(Alert.AlertType.INFORMATION, "Sukses", message);
-
-            // Refresh the table
-            loadBorrowedBooks();
-
-        } catch (SQLException e) {
-            showAlert(Alert.AlertType.ERROR, "Error", "Gagal mengembalikan buku");
-            e.printStackTrace();
-        }
-    }
-
-    private void loadBorrowedBooks() {
-        try {
-            String query = "SELECT p.id_pengembalian, p.id_peminjaman, p.tanggal_pengembalian, p.denda, " +
-                          "pm.nama_peminjam, pm.tanggal_peminjaman, pm.id_buku, " +
-                          "b.judul " +
-                          "FROM pengembalian p " +
-                          "JOIN peminjaman pm ON p.id_peminjaman = pm.id " +
-                          "JOIN buku b ON pm.id_buku = b.id";
-            
-            PreparedStatement stmt = connection.prepareStatement(query);
-            ResultSet rs = stmt.executeQuery();
-            
-            borrowedBooksTable.getItems().clear();
-            while (rs.next()) {
-                borrowedBooksTable.getItems().add(createPengembalianFromResultSet(rs));
-            }
-        } catch (SQLException e) {
-            showAlert(Alert.AlertType.ERROR, "Error", "Gagal memuat data");
-            e.printStackTrace();
-        }
-    }
-
-    private Pengembalian createPengembalianFromResultSet(ResultSet rs) throws SQLException {
-        return new Pengembalian(
-            rs.getInt("id_pengembalian"),
-            rs.getInt("id_peminjaman"),
-            rs.getString("nama_peminjam"),
-            rs.getString("judul"),
-            rs.getDate("tanggal_peminjaman").toLocalDate(),
-            rs.getDate("tanggal_pengembalian").toLocalDate(),
-            rs.getInt("denda"),
-            rs.getInt("id_buku")
+    private void loadReturnData() {
+        // Mengisi data ke dalam tabel (contoh data)
+        returnData = FXCollections.observableArrayList(
+            new Pengembalian(1, 101, 201, 301, "2023-01-01", "2023-01-10", null, 0, "Belum Kembali"),
+            new Pengembalian(2, 102, 202, 302, "2023-01-02", "2023-01-11", null, 0, "Belum Kembali")
+            // Tambahkan data lainnya sesuai kebutuhan
         );
-    }
 
-    // Navigation methods
-    @FXML
-    private void handleDashboardClick() {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/managementperpustakaan_javafx/Dashboard.fxml"));
-            Scene scene = dashboardBtn.getScene();
-            scene.setRoot(root);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        returnTable.setItems(returnData);
     }
 
     @FXML
-    private void handleManageBooks() {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/managementperpustakaan_javafx/ManageBooks.fxml"));
-            Scene scene = manageBookBtn.getScene();
-            scene.setRoot(root);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    private void handleTableClick(MouseEvent event) {
+        // Aktifkan tombol Kembalikan jika baris tabel dipilih
+        kembalikanBtn.setDisable(returnTable.getSelectionModel().getSelectedItem() == null);
     }
 
     @FXML
-    private void handleManageMembers() {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/managementperpustakaan_javafx/ManageMembers.fxml"));
-            Scene scene = manageMemberBtn.getScene();
-            scene.setRoot(root);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+    private void handleKembalikan() {
+        // Ambil data dari baris yang dipilih
+        Pengembalian selectedReturn = returnTable.getSelectionModel().getSelectedItem();
+        if (selectedReturn != null) {
+            // Logika untuk mengembalikan buku
+            // Misalnya, memperbarui status pengembalian dan stok buku
+            selectedReturn.setStatusPengembalian("Sudah Kembali");
+            // Update stok buku di database (logika database tidak ditampilkan di sini)
 
-    @FXML
-    private void handleManageBorrowing() {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/managementperpustakaan_javafx/Peminjaman.fxml"));
-            Scene scene = manageBorrowBtn.getScene();
-            scene.setRoot(root);
-        } catch (Exception e) {
-            e.printStackTrace();
+            // Refresh tabel
+            returnTable.refresh();
+            kembalikanBtn.setDisable(true); // Nonaktifkan tombol setelah pengembalian
         }
-    }
-
-    @FXML
-    private void handleLogout() {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/managementperpustakaan_javafx/Login.fxml"));
-            Stage stage = (Stage) logoutBtn.getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    private void handleManageReturn() {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/managementperpustakaan_javafx/Pengembalian.fxml"));
-            Stage stage = (Stage) manageReturnBtn.getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void showAlert(Alert.AlertType type, String title, String content) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
     }
 }

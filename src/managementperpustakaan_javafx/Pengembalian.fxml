@@ -1,17 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
-<?import javafx.scene.layout.VBox?>
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="600" prefWidth="1000" styleClass="mainFxmlClass" stylesheets="@assets/style_pengembalian.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="managementperpustakaan_javafx.controller.PengembalianController">
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="800.0" stylesheets="@assets/pengembalian.css" xmlns:fx="http://javafx.com/fxml/1" fx:controller="managementperpustakaan_javafx.controller.PengembalianController">
     <children>
         <HBox spacing="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
             <!-- Sidebar -->
@@ -24,7 +20,7 @@
                 <Button fx:id="manageBookBtn" maxWidth="Infinity" onAction="#handleManageBooks" styleClass="sidebar-button" text="Managemen Buku" />
                 <Button fx:id="manageMemberBtn" maxWidth="Infinity" onAction="#handleManageMembers" styleClass="sidebar-button" text="Managemen Anggota" />
                 <Button fx:id="manageBorrowBtn" maxWidth="Infinity" onAction="#handleManageBorrowing" styleClass="sidebar-button" text="Pinjaman" />
-                <Button fx:id="manageReturnBtn" onAction="#handleManageReturn" styleClass="sidebar-button" text="Manage Return" />
+                <Button fx:id="manageReturnBtn" onAction="#handleManageReturn" styleClass="sidebar-button" text="Pengembalian" />
                 <Region VBox.vgrow="ALWAYS" />
                 <Button fx:id="logoutBtn" maxWidth="Infinity" onAction="#handleLogout" styleClass="logout-button" text="Keluar" />
             </VBox>
@@ -35,33 +31,24 @@
                     <Insets bottom="20" left="20" right="20" top="20" />
                 </padding>
                 
-                <Label styleClass="page-title" text="Pengembalian Buku" />
+                <Label styleClass="dashboard-title" text="Pengembalian Buku" />
                 
-                <!-- Search Section -->
-                <HBox spacing="10" alignment="CENTER_LEFT">
-                    <TextField fx:id="searchField" promptText="Cari peminjam..." HBox.hgrow="ALWAYS" />
-                    <Button fx:id="searchButton" text="Cari" onAction="#handleSearch" />
-                </HBox>
+                <!-- Table for Return Data -->
+                <TableView fx:id="returnTable" VBox.vgrow="ALWAYS" onMouseClicked="#handleTableClick">
+                    <columns>
+                        <TableColumn fx:id="idPengembalianColumn" text="ID Pengembalian" />
+                        <TableColumn fx:id="idPeminjamanColumn" text="ID Peminjaman" />
+                        <TableColumn fx:id="idAnggotaColumn" text="ID Anggota" />
+                        <TableColumn fx:id="idBukuColumn" text="ID Buku" />
+                        <TableColumn fx:id="tanggalPinjamColumn" text="Tanggal Pinjam" />
+                        <TableColumn fx:id="tanggalJatuhTempoColumn" text="Tanggal Jatuh Tempo" />
+                        <TableColumn fx:id="tanggalPengembalianColumn" text="Tanggal Pengembalian" />
+                        <TableColumn fx:id="dendaColumn" text="Denda" />
+                        <TableColumn fx:id="statusPengembalianColumn" text="Status Pengembalian" />
+                    </columns>
+                </TableView>
                 
-                <!-- Borrowed Books Table -->
-                <VBox spacing="10" VBox.vgrow="ALWAYS">
-                    <Label styleClass="section-title" text="Daftar Peminjaman" />
-                    <TableView fx:id="borrowedBooksTable" VBox.vgrow="ALWAYS">
-                        <columns>
-                            <TableColumn fx:id="memberIdColumn" text="ID Anggota" prefWidth="100" />
-                            <TableColumn fx:id="memberNameColumn" text="Nama Anggota" prefWidth="150" />
-                            <TableColumn fx:id="bookTitleColumn" text="Judul Buku" prefWidth="200" />
-                            <TableColumn fx:id="borrowDateColumn" text="Tanggal Pinjam" prefWidth="120" />
-                            <TableColumn fx:id="dueDateColumn" text="Tanggal Kembali" prefWidth="120" />
-                            <TableColumn fx:id="fineColumn" text="Denda" prefWidth="100" />
-                        </columns>
-                    </TableView>
-                    
-                    <!-- Return Button -->
-                    <HBox alignment="CENTER_RIGHT" spacing="10">
-                        <Button fx:id="returnButton" text="Kembalikan Buku" onAction="#handleReturnBook" disable="true" styleClass="return-button" />
-                    </HBox>
-                </VBox>
+                <Button fx:id="kembalikanBtn" text="Kembalikan" onAction="#handleKembalikan" disable="true" />
             </VBox>
         </HBox>
     </children>
