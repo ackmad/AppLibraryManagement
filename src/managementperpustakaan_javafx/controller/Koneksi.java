@@ -5,12 +5,19 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class Koneksi {
+    // URL koneksi ke database
     private static final String URL = "jdbc:mysql://localhost:3306/java_ManagementPerpustakaan";
+    // Username untuk koneksi ke database
     private static final String USERNAME = "root";
+    // Password untuk koneksi ke database
     private static final String PASSWORD = "";
     
+    // Koneksi database
     private static Connection connection = null;
     
+    /**
+     * Mendapatkan koneksi ke database.
+     */
     public static Connection getConnection() {
         try {
             if (connection == null || connection.isClosed()) {

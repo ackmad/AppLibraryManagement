@@ -7,7 +7,8 @@ package managementperpustakaan_javafx.model;
 import java.time.LocalDate;
 
 /**
- *
+ * Kelas Pengembalian
+ * 
  * @author ackmadelfanp
  */
 public class Pengembalian {
@@ -38,7 +39,7 @@ public class Pengembalian {
         this.idBuku = idBuku;
     }
     
-        // Getters dan Setters
+    // Getter dan Setter
     public int getIdPengembalian() { return idPengembalian;}
     public int getIdPeminjaman() { return idPeminjaman; }
     public int getIdAnggota() { return idAnggota; }

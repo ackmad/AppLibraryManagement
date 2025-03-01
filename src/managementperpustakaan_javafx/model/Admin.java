@@ -13,13 +13,13 @@ public class Admin {
         this.password = password;
     }
 
-    // Getters
+    // Getter
     public int getIdAdmin() { return idAdmin; }
     public String getUsername() { return username; }
     public String getName() { return name; }
     public String getPassword() { return password; }
 
-    // Setters
+    // Setter
     public void setIdAdmin(int idAdmin) { this.idAdmin = idAdmin; }
     public void setUsername(String username) { this.username = username; }
     public void setName(String name) { this.name = name; }

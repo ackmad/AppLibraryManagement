@@ -5,7 +5,8 @@
 package managementperpustakaan_javafx.model;
 
 /**
- *
+ * Kelas dashboard
+ * 
  * @author ackmadelfanp
  */
 public class dashboard {

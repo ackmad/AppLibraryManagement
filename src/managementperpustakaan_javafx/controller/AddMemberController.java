@@ -19,7 +19,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 /**
- * FXML Controller class
+ * Kelas Controller FXML
  *
  * @author ackmadelfanp
  */
@@ -32,7 +32,7 @@ public class AddMemberController implements Initializable {
     private ManageMembersController manageMembersController;
     
     /**
-     * Initializes the controller class.
+     * Menginisialisasi kelas controller.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {

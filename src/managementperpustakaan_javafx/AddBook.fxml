@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!-- Mengimpor kelas yang diperlukan -->
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
@@ -13,7 +14,7 @@
     </stylesheets>
     <children>
         <VBox spacing="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
-            <!-- Header Section -->
+            <!-- Bagian Header -->
             <HBox styleClass="header-section" alignment="CENTER_LEFT" spacing="15">
                 <padding>
                     <Insets top="30" right="40" bottom="30" left="40"/>
@@ -29,20 +30,20 @@
                 </VBox>
             </HBox>
 
-            <!-- Main Content -->
+            <!-- Konten Utama -->
             <VBox styleClass="content-section" spacing="30">
                 <padding>
                     <Insets top="40" right="40" bottom="40" left="40"/>
                 </padding>
 
-                <!-- Form Section -->
+                <!-- Bagian Form -->
                 <GridPane hgap="30" vgap="25">
                     <columnConstraints>
                         <ColumnConstraints minWidth="150" prefWidth="200"/>
                         <ColumnConstraints hgrow="ALWAYS" minWidth="300" prefWidth="400"/>
                     </columnConstraints>
 
-                    <!-- ID Buku Section -->
+                    <!-- ID Buku Bagian -->
                     <VBox spacing="8" GridPane.columnIndex="0" GridPane.rowIndex="0">
                         <Label text="ID Buku" styleClass="field-label"/>
                         <Label text="Masukkan ID unik buku" styleClass="field-description"/>
@@ -52,35 +53,35 @@
                         <Label text="Contoh: BK001" styleClass="field-helper"/>
                     </VBox>
 
-                    <!-- Judul Section -->
+                    <!-- Judul Bagian -->
                     <VBox spacing="8" GridPane.columnIndex="0" GridPane.rowIndex="1">
                         <Label text="Judul Buku" styleClass="field-label"/>
                         <Label text="Masukkan judul lengkap" styleClass="field-description"/>
                     </VBox>
                     <TextField fx:id="judulField" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
 
-                    <!-- Penulis Section -->
+                    <!-- Penulis Bagian -->
                     <VBox spacing="8" GridPane.columnIndex="0" GridPane.rowIndex="2">
                         <Label text="Penulis" styleClass="field-label"/>
                         <Label text="Nama lengkap penulis" styleClass="field-description"/>
                     </VBox>
                     <TextField fx:id="penulisField" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
 
-                    <!-- Penerbit Section -->
+                    <!-- Penerbit Bagian -->
                     <VBox spacing="8" GridPane.columnIndex="0" GridPane.rowIndex="3">
                         <Label text="Penerbit" styleClass="field-label"/>
                         <Label text="Nama penerbit buku" styleClass="field-description"/>
                     </VBox>
                     <TextField fx:id="penerbitField" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
 
-                    <!-- Tahun Terbit Section -->
+                    <!-- Tahun Terbit Bagian -->
                     <VBox spacing="8" GridPane.columnIndex="0" GridPane.rowIndex="4">
                         <Label text="Tahun Terbit" styleClass="field-label"/>
                         <Label text="Format: YYYY" styleClass="field-description"/>
                     </VBox>
                     <TextField fx:id="tahunTerbitField" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
 
-                    <!-- Stok Section -->
+                    <!-- Stok Bagian -->
                     <VBox spacing="8" GridPane.columnIndex="0" GridPane.rowIndex="5">
                         <Label text="Stok" styleClass="field-label"/>
                         <Label text="Jumlah buku tersedia" styleClass="field-description"/>
@@ -88,10 +89,10 @@
                     <TextField fx:id="stokField" styleClass="form-field" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
                 </GridPane>
 
-                <!-- Divider -->
+                <!-- Pembatas -->
                 <Line styleClass="divider"/>
 
-                <!-- Buttons Section -->
+                <!-- Bagian Tombol -->
                 <HBox spacing="15" alignment="CENTER_RIGHT">
                     <Button fx:id="cancelButton" onAction="#handleCancel" styleClass="button-secondary" text="Batal">
                         <graphic>

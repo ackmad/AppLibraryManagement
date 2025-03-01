@@ -25,7 +25,7 @@ import java.io.IOException;
 import javafx.collections.transformation.FilteredList;
 
 /**
- * FXML Controller class
+ * Kelas Controller FXML
  *
  * @author ackmadelfanp
  */
@@ -62,7 +62,7 @@ public class PengembalianController implements Initializable {
     private TableColumn<Pengembalian, String> statusPengembalianColumn;
 
     /**
-     * Initializes the controller class.
+     * Menginisialisasi kelas controller.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {

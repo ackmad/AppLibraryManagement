@@ -28,7 +28,7 @@ import managementperpustakaan_javafx.controller.Koneksi;
 import managementperpustakaan_javafx.model.Anggota;
 
 /**
- * FXML Controller class
+ * Kelas Controller FXML
  *
  * @author ackmadelfanp
  */
@@ -77,7 +77,7 @@ public class ManageMembersController implements Initializable {
     @FXML private TextField nomorHpField;
 
     /**
-     * Initializes the controller class.
+     * Menginisialisasi kelas controller.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {

@@ -31,7 +31,7 @@ import managementperpustakaan_javafx.controller.Koneksi;
 import managementperpustakaan_javafx.model.Peminjaman;
 
 /**
- * FXML Controller class
+ * Kelas Controller FXML
  *
  * @author ackmadelfanp
  */
@@ -92,7 +92,7 @@ public class PeminjamanController implements Initializable {
     private TableColumn<Peminjaman, String> statusColumn;
 
     /**
-     * Initializes the controller class.
+     * Menginisialisasi kelas controller.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {

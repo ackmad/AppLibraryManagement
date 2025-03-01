@@ -21,9 +21,13 @@ import managementperpustakaan_javafx.model.Peminjaman;
 
 public class DashboardController implements Initializable {
 
+    // Label untuk jumlah buku
     @FXML private Label labelJumlahBuku;
+    // Label untuk anggota aktif
     @FXML private Label labelAnggotaAktif;
+    // Label untuk buku yang dipinjam
     @FXML private Label labelBukuDipinjam;
+    // Label untuk total denda
     @FXML private Label labelTotalDenda;
     @FXML private Button manageReturnBtn;
     @FXML private TableView<String> anggotaTableView;
@@ -35,6 +39,9 @@ public class DashboardController implements Initializable {
     @FXML private TableColumn<Peminjaman, String> bukuColumn;
     @FXML private TableColumn<Peminjaman, String> tanggalColumn;
 
+    /**
+     * Menginisialisasi kelas controller.
+     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         updateDashboardData();
@@ -109,12 +116,12 @@ public class DashboardController implements Initializable {
 
     @FXML
     private void handleManageBorrowing(ActionEvent event) {
-        loadScene(event, "/managementperpustakaan_javafx/ManageBorrowing.fxml", "Pinjaman");
+        loadScene(event, "/managementperpustakaan_javafx/Peminjaman.fxml", "Pinjaman");
     }
 
     @FXML
     private void handleManageReturn(ActionEvent event) {
-        loadScene(event, "/managementperpustakaan_javafx/ManageReturn.fxml", "Pengembalian");
+        loadScene(event, "/managementperpustakaan_javafx/Pengembalian.fxml", "Pengembalian");
     }
 
     @FXML

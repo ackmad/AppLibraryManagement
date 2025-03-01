@@ -19,7 +19,7 @@ import javafx.stage.Stage;
 import managementperpustakaan_javafx.controller.Koneksi;
 
 /**
- * FXML Controller class
+ * Kelas Controller FXML
  *
  * @author ackmadelfanp
  */
@@ -33,7 +33,7 @@ public class AddBookController implements Initializable {
     @FXML private TextField stokField;
     
     /**
-     * Initializes the controller class.
+     * Menginisialisasi kelas controller.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!-- Mengimpor kelas yang diperlukan -->
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -14,7 +15,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane id="AnchorPane" prefHeight="600" prefWidth="1000" stylesheets="@assets/style_dashboard.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="managementperpustakaan_javafx.controller.DashboardController">
     <children>
         <HBox spacing="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
@@ -25,15 +25,15 @@
                 </padding>
                 <Label styleClass="sidebar-title" text="Perpustakaan Kita" />
                 <Button fx:id="dashboardBtn" maxWidth="Infinity" onAction="#handleDashboardClick" styleClass="sidebar-button" text="Dashboard" />
-                <Button fx:id="manageBookBtn" maxWidth="Infinity" onAction="#handleManageBooks" styleClass="sidebar-button" text="Managemen Buku" />
-                <Button fx:id="manageMemberBtn" maxWidth="Infinity" onAction="#handleManageMembers" styleClass="sidebar-button" text="Managemen Anggota" />
+                <Button fx:id="manageBookBtn" maxWidth="Infinity" onAction="#handleManageBooks" styleClass="sidebar-button" text="Manajemen Buku" />
+                <Button fx:id="manageMemberBtn" maxWidth="Infinity" onAction="#handleManageMembers" styleClass="sidebar-button" text="Manajemen Anggota" />
                 <Button fx:id="manageBorrowBtn" maxWidth="Infinity" onAction="#handleManageBorrowing" styleClass="sidebar-button" text="Pinjaman" />
                 <Button fx:id="manageReturnBtn" onAction="#handleManageReturn" styleClass="sidebar-button" text="Pengembalian" />
                 <Region VBox.vgrow="ALWAYS" />
                 <Button fx:id="logoutBtn" maxWidth="Infinity" onAction="#handleLogout" styleClass="logout-button" text="Keluar" />
             </VBox>
 
-            <!-- Main Content -->
+            <!-- Konten Utama -->
             <VBox spacing="20" styleClass="main-content" HBox.hgrow="ALWAYS">
                 <padding>
                     <Insets bottom="20" left="20" right="20" top="20" />
@@ -41,7 +41,7 @@
                 
                 <Label styleClass="dashboard-title" text="Halaman Utama" />
                 
-                <!-- Statistics Cards -->
+                <!-- Kartu Statistik -->
                 <GridPane hgap="20" vgap="20">
                     <columnConstraints>
                         <ColumnConstraints percentWidth="25" />
@@ -50,7 +50,7 @@
                         <ColumnConstraints percentWidth="25" />
                     </columnConstraints>
                     
-                    <!-- Total Books Card -->
+                    <!-- Kartu Total Buku -->
                     <VBox styleClass="card" GridPane.columnIndex="0">
                         <Label styleClass="card-title" text="Total Buku">
                      <font>
@@ -59,7 +59,7 @@
                         <Label fx:id="labelJumlahBuku" styleClass="card-value" text="0" />
                     </VBox>
                     
-                    <!-- Active Members Card -->
+                    <!-- Kartu Anggota Aktif -->
                     <VBox styleClass="card" GridPane.columnIndex="1">
                         <Label styleClass="card-title" text="Anggota Aktif">
                      <font>
@@ -68,16 +68,16 @@
                         <Label fx:id="labelAnggotaAktif" styleClass="card-value" text="0" />
                     </VBox>
                     
-                    <!-- Borrowed Books Card -->
+                    <!-- Kartu Buku yang Dipinjam -->
                     <VBox styleClass="card" GridPane.columnIndex="2">
-                        <Label styleClass="card-title" text="Buku yang di Pinjam">
+                        <Label styleClass="card-title" text="Buku yang Dipinjam">
                      <font>
                         <Font size="5.0" />
                      </font></Label>
                         <Label fx:id="labelBukuDipinjam" styleClass="card-value" text="0" />
                     </VBox>
                     
-                    <!-- Total Fines Card -->
+                    <!-- Kartu Total Denda -->
                     <VBox styleClass="card" GridPane.columnIndex="3">
                         <Label styleClass="card-title" text="Total Denda">
                      <font>
@@ -90,12 +90,12 @@
                </rowConstraints>
                 </GridPane>
                 
-                <!-- Recent Activities Section -->
+                <!-- Bagian Aktivitas Terbaru -->
                 <VBox spacing="10" styleClass="recent-activities">
-                    <Label prefWidth="188.0" styleClass="section-title" text="Anggota" />
-                    <TableView fx:id="anggotaTableView" prefHeight="200" prefWidth="400" VBox.vgrow="ALWAYS">
+                    <Label prefWidth="188.0" styleClass="section-title" text="Daftar Nama Anggota" />
+                    <TableView fx:id="anggotaTableView" prefHeight="200" prefWidth="377.0" VBox.vgrow="ALWAYS">
                         <columns>
-                            <TableColumn fx:id="namaColumn" text="Nama Anggota" prefWidth="400"/>
+                            <TableColumn fx:id="namaColumn" prefWidth="744.0" text="Nama Anggota" />
                         </columns>
                     </TableView>                
                 </VBox>

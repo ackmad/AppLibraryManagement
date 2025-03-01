@@ -36,7 +36,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 
 /**
- * FXML Controller class
+ * Kelas Controller FXML
  *
  * @author ackmadelfanp
  */
@@ -86,7 +86,7 @@ public class ManageBooksController implements Initializable {
     private ComboBox<String> searchCriteria;
 
     /**
-     * Initializes the controller class.
+     * Menginisialisasi kelas controller.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {

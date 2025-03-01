@@ -24,6 +24,7 @@ import javafx.scene.Node;
 import managementperpustakaan_javafx.model.Admin;
 
 /**
+ * Kelas Controller FXML
  *
  * @author ackmadelfanp
  */
