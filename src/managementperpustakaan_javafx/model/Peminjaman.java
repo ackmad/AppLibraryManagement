@@ -3,7 +3,13 @@ package managementperpustakaan_javafx.model;
 import java.time.LocalDate;
 
 public class Peminjaman {
-    private int idPeminjaman;
+    
+    private int id_peminjaman;
+    private String nama;
+    private String judul;
+    private LocalDate tanggal_pinjam;
+
+       private int idPeminjaman;
     private int idAnggota;
     private int idBuku;
     private LocalDate tanggalPinjam;
@@ -15,13 +21,20 @@ public class Peminjaman {
     private String judulBuku;
 
     public Peminjaman(int idPeminjaman, int idAnggota, int idBuku, LocalDate tanggalPinjam, 
-                     LocalDate tanggalJatuhTempo, String status) {
+                      LocalDate tanggalJatuhTempo, String status) {
         this.idPeminjaman = idPeminjaman;
         this.idAnggota = idAnggota;
         this.idBuku = idBuku;
         this.tanggalPinjam = tanggalPinjam;
         this.tanggalJatuhTempo = tanggalJatuhTempo;
         this.status = status;
+    }
+
+    public Peminjaman(int id_peminjaman, String nama, String judul, LocalDate tanggal_pinjam) {
+        this.id_peminjaman = id_peminjaman;
+        this.nama = nama;
+        this.judul = judul;
+        this.tanggal_pinjam = tanggal_pinjam;
     }
 
     // Getters
@@ -43,4 +56,5 @@ public class Peminjaman {
     public void setStatus(String status) { this.status = status; }
     public void setNamaAnggota(String namaAnggota) { this.namaAnggota = namaAnggota; }
     public void setJudulBuku(String judulBuku) { this.judulBuku = judulBuku; }
+
 } 

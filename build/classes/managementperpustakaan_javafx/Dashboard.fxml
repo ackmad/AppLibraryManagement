@@ -14,6 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+
 <AnchorPane id="AnchorPane" prefHeight="600" prefWidth="1000" stylesheets="@assets/style_dashboard.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="managementperpustakaan_javafx.controller.DashboardController">
     <children>
         <HBox spacing="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
@@ -92,13 +93,11 @@
                 <!-- Recent Activities Section -->
                 <VBox spacing="10" styleClass="recent-activities">
                     <Label prefWidth="188.0" styleClass="section-title" text="Anggota" />
-                    <TableView fx:id="recentActivitiesTable" VBox.vgrow="ALWAYS">
+                    <TableView fx:id="anggotaTableView" prefHeight="200" prefWidth="400" VBox.vgrow="ALWAYS">
                         <columns>
-                            <TableColumn fx:id="dateColumn" prefWidth="150" text="Date" />
-                            <TableColumn fx:id="activityColumn" prefWidth="377.0" text="Activity" />
-                            <TableColumn fx:id="userColumn" prefWidth="232.0" text="User" />
+                            <TableColumn fx:id="namaColumn" text="Nama Anggota" prefWidth="400"/>
                         </columns>
-                    </TableView>
+                    </TableView>                
                 </VBox>
             </VBox>
         </HBox>

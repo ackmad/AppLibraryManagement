@@ -29,6 +29,8 @@ public class AddMemberController implements Initializable {
     @FXML private TextArea alamatField;
     @FXML private TextField nomorHpField;
     
+    private ManageMembersController manageMembersController;
+    
     /**
      * Initializes the controller class.
      */
@@ -85,8 +87,12 @@ public class AddMemberController implements Initializable {
             if (affected > 0) {
                 showAlert(Alert.AlertType.INFORMATION, "Sukses", "Anggota berhasil ditambahkan!");
                 clearFields();
-                // Set focus back to nama field after clearing
-                Platform.runLater(() -> namaField.requestFocus());
+                // Notify ManageMembersController to refresh the table
+                if (manageMembersController != null) {
+                    manageMembersController.refreshMemberTable();
+                }
+                // Close the window
+                handleCancel(null);
             }
             
         } catch (SQLException e) {
@@ -106,5 +112,10 @@ public class AddMemberController implements Initializable {
         alert.setHeaderText(null);
         alert.setContentText(content);
         alert.showAndWait();
+    }
+
+    // Method to set the reference to ManageMembersController
+    public void setManageMembersController(ManageMembersController controller) {
+        this.manageMembersController = controller;
     }
 }

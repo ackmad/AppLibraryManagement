@@ -64,16 +64,9 @@
                                 <Button fx:id="deleteButton" onAction="#handleDeleteMember" styleClass="action-button, delete-button" text="Delete" />
                                 <Button fx:id="exportButton" onAction="#handleExportToExcel" styleClass="action-button, export-button" text="Export to Excel" />
                             </HBox>
-
-                            <!-- Input Fields Area -->
-                            <HBox spacing="10" styleClass="input-area">
-                                <TextField fx:id="namaField" promptText="Nama" styleClass="input-field" />
-                                <TextField fx:id="alamatField" promptText="Alamat" styleClass="input-field" />
-                                <TextField fx:id="nomorHpField" promptText="Nomor HP" styleClass="input-field" />
-                            </HBox>
                             
                             <!-- Table Area -->
-                            <TableView fx:id="memberTable" styleClass="member-table" VBox.vgrow="ALWAYS">
+                            <TableView fx:id="memberTable" prefHeight="529.0" prefWidth="919.0" styleClass="member-table" VBox.vgrow="ALWAYS">
                                 <columns>
                                     <TableColumn fx:id="idColumn" prefWidth="100" text="ID" />
                                     <TableColumn fx:id="namaColumn" prefWidth="250" text="Nama" />

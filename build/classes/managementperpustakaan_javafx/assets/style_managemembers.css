@@ -160,3 +160,43 @@
 .main-content {
     -fx-background-color: #f8f9fa;
 }
+
+/*
+ * Stylesheet for Member Management
+ */
+
+.member-table {
+    -fx-background-color: white;
+    -fx-border-color: #dcdcdc;
+    -fx-border-radius: 5px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 3, 0, 0, 1);
+}
+
+.member-table .column-header {
+    -fx-background-color: #007bff;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 10px;
+}
+
+.member-table .table-row-cell {
+    -fx-background-color: white;
+    -fx-text-fill: black;
+    -fx-border-color: transparent;
+}
+
+.member-table .table-row-cell:odd {
+    -fx-background-color: #f8f9fa;
+}
+
+.member-table .table-row-cell:hover {
+    -fx-background-color: #e9ecef;
+}
+
+.member-table .table-row-cell:selected {
+    -fx-background-color: #007bff;
+}
+
+.member-table .table-row-cell:selected .text {
+    -fx-fill: white;
+}

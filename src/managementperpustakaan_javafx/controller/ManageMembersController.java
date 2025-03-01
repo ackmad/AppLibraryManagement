@@ -237,33 +237,28 @@ public class ManageMembersController implements Initializable {
 
     @FXML
     private void handleAddMember() {
-        String nama = namaField.getText();
-        String alamat = alamatField.getText();
-        String nomorHp = nomorHpField.getText();
-        
-        if (nama.isEmpty() || alamat.isEmpty() || nomorHp.isEmpty()) {
-            showAlert("Error", "Semua field harus diisi!");
-            return;
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/managementperpustakaan_javafx/AddMember.fxml"));
+            Parent root = loader.load();
+            
+            // Get the controller of AddMember
+            AddMemberController addMemberController = loader.getController();
+            
+            // Set the current controller to be notified when a member is added
+            addMemberController.setManageMembersController(this);
+            
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.show();
+            
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        
-        String query = "INSERT INTO anggota (nama, alamat, nomor_hp) VALUES (?, ?, ?)";
-        
-        try (Connection conn = Koneksi.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(query)) {
-            
-            pstmt.setString(1, nama);
-            pstmt.setString(2, alamat);
-            pstmt.setString(3, nomorHp);
-            
-            pstmt.executeUpdate();
-            
-            clearFields();
-            loadMembers();
-            showAlert("Sukses", "Anggota berhasil ditambahkan!");
-            
-        } catch (SQLException e) {
-            showAlert("Error", "Gagal menambahkan anggota: " + e.getMessage());
-        }
+    }
+
+    // Method to refresh the member table
+    public void refreshMemberTable() {
+        loadMembers();
     }
 
     @FXML

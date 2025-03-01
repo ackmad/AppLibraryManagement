@@ -29,7 +29,7 @@
             </VBox>
 
             <!-- Main Content -->
-            <VBox prefHeight="720.0" prefWidth="1218.0" spacing="20" styleClass="main-content" HBox.hgrow="ALWAYS">
+            <VBox prefHeight="720.0" prefWidth="1224.0" spacing="20" styleClass="main-content" HBox.hgrow="ALWAYS">
                 <padding>
                     <Insets bottom="20" left="20" right="20" top="20" />
                 </padding>
@@ -43,16 +43,16 @@
                 
                 <TableView fx:id="returnTable" styleClass="return-table" VBox.vgrow="ALWAYS">
                     <columns>
-                        <TableColumn fx:id="idPengembalianColumn" text="ID Pengembalian" />
-                        <TableColumn fx:id="idPeminjamanColumn" text="ID Peminjaman" />
-                        <TableColumn fx:id="idAnggotaColumn" text="ID Anggota" />
-                        <TableColumn fx:id="namaAnggotaColumn" text="Nama Anggota" />
-                        <TableColumn fx:id="judulBukuColumn" prefWidth="181.0" text="Judul Buku" />
-                        <TableColumn fx:id="tanggalPinjamColumn" prefWidth="53.0" text="Tanggal Pinjam" />
-                        <TableColumn fx:id="tanggalJatuhTempoColumn" prefWidth="93.0" text="Tanggal Jatuh Tempo" />
-                        <TableColumn fx:id="tanggalPengembalianColumn" prefWidth="64.0" text="Tanggal Pengembalian" />
-                        <TableColumn fx:id="dendaColumn" prefWidth="153.0" text="Denda" />
-                        <TableColumn fx:id="statusPengembalianColumn" prefWidth="182.0" text="Status" />
+                        <TableColumn fx:id="idPengembalianColumn" minWidth="0.0" prefWidth="0.0" text="ID Peng" />
+                        <TableColumn fx:id="idPeminjamanColumn" prefWidth="69.0" text="ID Pem" />
+                        <TableColumn fx:id="idAnggotaColumn" prefWidth="75.0" text="ID Ang" />
+                        <TableColumn fx:id="namaAnggotaColumn" prefWidth="144.0" text="Nama" />
+                        <TableColumn fx:id="judulBukuColumn" prefWidth="125.0" text="Buku" />
+                        <TableColumn fx:id="tanggalPinjamColumn" prefWidth="116.0" text="Tgl Pinjam" />
+                        <TableColumn fx:id="tanggalJatuhTempoColumn" prefWidth="132.0" text="Tgl Jatuh Tempo" />
+                        <TableColumn fx:id="tanggalPengembalianColumn" prefWidth="101.0" text="Tgl Pengembalian" />
+                        <TableColumn fx:id="dendaColumn" prefWidth="90.0" text="Denda" />
+                        <TableColumn fx:id="statusPengembalianColumn" prefWidth="161.5" text="Status" />
                     </columns>
                 </TableView>
                 
