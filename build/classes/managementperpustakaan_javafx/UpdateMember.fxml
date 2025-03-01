@@ -1,31 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="500" prefWidth="350" 
-            xmlns:fx="http://javafx.com/fxml/1" 
-            fx:controller="managementperpustakaan_javafx.controller.UpdateMemberController"
-            stylesheets="@assets/style_pengembalian.css" >
+<AnchorPane id="AnchorPane" prefHeight="255.0" prefWidth="298.0" stylesheets="@assets/style_pengembalian.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="managementperpustakaan_javafx.controller.UpdateMemberController">
     
     <children>
-        <VBox spacing="12" alignment="CENTER">
+        <VBox alignment="CENTER" layoutX="6.0" prefHeight="255.0" prefWidth="298.0" spacing="12">
             <padding>
-                <Insets top="15" right="20" bottom="20" left="20"/>
+                <Insets bottom="20" left="20" right="20" top="15" />
             </padding>
 
-            <Label text="Update Anggota" styleClass="page-title"/>
+            <Label styleClass="page-title" text="Update Anggota" />
 
             <VBox spacing="8">
-                <TextField fx:id="namaField" promptText="Nama Lengkap" styleClass="input-field"/>
-                <TextField fx:id="alamatField" promptText="Alamat" styleClass="input-field"/>
-                <TextField fx:id="nomorHpField" promptText="Nomor HP" styleClass="input-field"/>
+                <TextField fx:id="namaField" prefHeight="26.0" prefWidth="144.0" promptText="Nama Lengkap" styleClass="input-field" />
+                <TextField fx:id="nomorHpField" promptText="Nomor HP" styleClass="input-field" />
+                <TextField fx:id="alamatField" accessibleRole="TEXT_AREA" alignment="TOP_LEFT" prefHeight="57.0" prefWidth="258.0" promptText="Alamat" styleClass="input-field" />
             </VBox>
 
-            <HBox spacing="10" alignment="CENTER">
-                <Button fx:id="saveButton" text="Simpan" styleClass="action-button add-button" onAction="#handleSave"/>
-                <Button text="Batal" styleClass="action-button delete-button" onAction="#handleCancel"/>
+            <HBox alignment="CENTER" spacing="10">
+                <Button fx:id="saveButton" onAction="#handleSave" text="Simpan">
+               <styleClass>
+                  <String fx:value="action-button" />
+                  <String fx:value="add-button" />
+               </styleClass>
+            </Button>
+                <Button onAction="#handleCancel" text="Batal">
+               <styleClass>
+                  <String fx:value="action-button" />
+                  <String fx:value="delete-button" />
+               </styleClass>
+            </Button>
             </HBox>
         </VBox>
     </children>

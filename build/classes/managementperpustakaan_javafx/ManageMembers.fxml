@@ -66,7 +66,7 @@
                                     <Button fx:id="addButton" onAction="#handleAddMember" styleClass="action-button, add-button" text="Tambah Anggota" />
                                     <Button fx:id="deleteButton" onAction="#handleDeleteMember" styleClass="action-button, delete-button" text="Hapus" />
                                     <Button fx:id="editButton" onAction="#handleEditMember" styleClass="action-button, edit-button" text="Edit" />
-    <Button fx:id="exportButton" onAction="#handleExportToPDF" styleClass="action-button, export-button" text="Ekspor ke PDF" /> <!-- Tombol Ekspor -->
+                                    <Button fx:id="exportButton" onAction="#handleExportToPDF" styleClass="action-button, export-button" text="Ekspor ke PDF" /> <!-- Tombol Ekspor -->
                                 </HBox>
                             </HBox>
                             
