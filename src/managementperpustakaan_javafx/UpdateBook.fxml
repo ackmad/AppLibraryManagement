@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" fx:controller="managementperpustakaan_javafx.controller.UpdateBookController">
+    <children>
+        <VBox spacing="15" alignment="CENTER" prefWidth="600.0" layoutX="20" layoutY="20">
+            <Label text="Edit Buku" styleClass="page-title" />
+            <GridPane hgap="10" vgap="10" alignment="CENTER">
+                <columnConstraints>
+                    <ColumnConstraints halignment="RIGHT" />
+                    <ColumnConstraints hgrow="ALWAYS" />
+                </columnConstraints>
+                
+                <Label text="Judul:" />
+                <TextField fx:id="judulField" promptText="Masukkan Judul Buku" GridPane.columnIndex="1" />
+
+                <Label text="Penulis:" GridPane.rowIndex="1" />
+                <TextField fx:id="penulisField" promptText="Masukkan Nama Penulis" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                <Label text="Penerbit:" GridPane.rowIndex="2" />
+                <TextField fx:id="penerbitField" promptText="Masukkan Nama Penerbit" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+                <Label text="Tahun Terbit:" GridPane.rowIndex="3" />
+                <TextField fx:id="tahunField" promptText="Masukkan Tahun Terbit" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+
+                <Label text="Stok:" GridPane.rowIndex="4" />
+                <TextField fx:id="stokField" promptText="Masukkan Jumlah Stok" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            </GridPane>
+
+            <HBox spacing="10" alignment="CENTER">
+                <Button fx:id="saveButton" onAction="#handleSave" text="Simpan Perubahan" styleClass="action-button save-button" />
+                <Button fx:id="cancelButton" onAction="#handleCancel" text="Batal" styleClass="action-button cancel-button" />
+            </HBox>
+        </VBox>
+    </children>
+</AnchorPane>

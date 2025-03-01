@@ -1,0 +1,102 @@
+/* ====== STYLE UNTUK HALAMAN UTAMA ====== */
+.mainFxmlClass {
+    -fx-background-color: linear-gradient(to bottom, #f0f9ff, #cbebff);
+}
+
+/* ====== STYLE UNTUK JUDUL ====== */
+.page-title {
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0077b6;
+    -fx-effect: dropshadow(gaussian, rgba(0, 119, 182, 0.3), 8, 0.5, 0, 2);
+}
+
+/* ====== STYLE UNTUK INPUT FIELD ====== */
+.text-field {
+    -fx-pref-width: 260px;
+    -fx-padding: 8px;
+    -fx-font-size: 14px;
+    -fx-border-color: rgb(226, 200, 56);
+    -fx-border-width: 2px;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-background-color: #ffffff;
+    -fx-effect: dropshadow(gaussian, rgba(0, 119, 182, 0.2), 5, 0.5, 0, 2);
+    -fx-transition: all 0.3s;
+}
+
+/* Efek saat input difokuskan */
+.text-field:focused {
+    -fx-border-color: #005b8f;
+    -fx-border-width: 3px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 91, 143, 0.4), 10, 0.5, 0, 3);
+}
+
+/* ====== STYLE UNTUK TOMBOL ====== */
+.action-button {
+    -fx-padding: 10px 18px;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-text-fill: white;
+    -fx-cursor: hand;
+    -fx-transition: all 0.3s ease-in-out;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0.5, 0, 2);
+}
+
+/* ====== TOMBOL SIMPAN ====== */
+.save-button {
+    -fx-background-color: #28a745;
+}
+
+.save-button:hover {
+    -fx-background-color: #218838;
+    -fx-effect: dropshadow(gaussian, rgba(33, 136, 56, 0.5), 8, 0.5, 0, 3);
+}
+
+/* Efek saat tombol ditekan */
+.save-button:pressed {
+    -fx-background-color: #1e7e34;
+    -fx-translate-y: 2px;
+}
+
+/* ====== TOMBOL BATAL ====== */
+.cancel-button {
+    -fx-background-color: #dc3545;
+}
+
+.cancel-button:hover {
+    -fx-background-color: #c82333;
+    -fx-effect: dropshadow(gaussian, rgba(200, 35, 51, 0.5), 8, 0.5, 0, 3);
+}
+
+.cancel-button:pressed {
+    -fx-background-color: #bd2130;
+    -fx-translate-y: 2px;
+}
+
+/* ====== HOVER PADA LABEL FORM ====== */
+.label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #005b8f;
+    -fx-font-weight: bold;
+    -fx-transition: all 0.2s;
+}
+
+.label:hover {
+    -fx-text-fill: #0077b6;
+}
+
+/* ====== ANIMASI TRANSISI SAAT HALAMAN MUNCUL ====== */
+VBox {
+    -fx-opacity: 0;
+    -fx-translate-y: 20px;
+    -fx-transition: opacity 0.5s ease-in-out, translate-y 0.5s ease-in-out;
+}
+
+/* Animasi saat halaman muncul */
+VBox:hover {
+    -fx-opacity: 1;
+    -fx-translate-y: 0;
+}

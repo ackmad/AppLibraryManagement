@@ -296,6 +296,34 @@ public class ManageBooksController implements Initializable {
         }
     }
 
+    @FXML
+    private void handleEditBook(ActionEvent event) {
+        Buku selectedBook = bookTable.getSelectionModel().getSelectedItem();
+        if (selectedBook == null) {
+            showAlert("Error", "Silakan pilih buku yang ingin diedit.");
+            return;
+        }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/managementperpustakaan_javafx/UpdateBook.fxml"));
+            Parent root = loader.load();
+
+            // Pass the selected book to the UpdateBookController
+            UpdateBookController controller = loader.getController();
+            controller.setBook(selectedBook);
+
+            Stage stage = new Stage();
+            stage.setTitle("Edit Buku");
+            stage.setScene(new Scene(root));
+            stage.show();
+
+            // Refresh the book table after the update window is closed
+            stage.setOnHidden(e -> loadBooks());
+        } catch (IOException e) {
+            showAlert("Error", "Gagal membuka form edit buku: " + e.getMessage());
+        }
+    }
+
     private void setupTable() {
         idColumn.setCellValueFactory(new PropertyValueFactory<>("idBuku"));
         judulColumn.setCellValueFactory(new PropertyValueFactory<>("judul"));

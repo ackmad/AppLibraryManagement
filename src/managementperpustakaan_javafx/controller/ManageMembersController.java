@@ -27,6 +27,11 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import managementperpustakaan_javafx.controller.Koneksi;
 import managementperpustakaan_javafx.model.Anggota;
 import javafx.scene.control.ButtonType;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import javafx.stage.FileChooser;
 
 /**
  * Kelas Controller FXML
@@ -194,6 +199,58 @@ public class ManageMembersController implements Initializable {
         // Implementasi logika export ke Excel
     }
 
+    @FXML
+    private void handleExportToPDF(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Simpan File PDF");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF files (*.pdf)", "*.pdf"));
+        
+        File file = fileChooser.showSaveDialog(null);
+        if (file != null) {
+            try {
+                Document document = new Document(PageSize.A4.rotate());
+                PdfWriter.getInstance(document, new FileOutputStream(file));
+                document.open();
+                
+                // Tambahkan judul
+                Font titleFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18);
+                Paragraph title = new Paragraph("Laporan Anggota", titleFont);
+                title.setAlignment(Element.ALIGN_CENTER);
+                document.add(title);
+                document.add(new Paragraph("\n"));
+                
+                // Buat tabel
+                PdfPTable table = new PdfPTable(4); // 4 kolom
+                table.setWidthPercentage(100);
+                
+                // Tambahkan header sel
+                String[] headers = {"ID", "Nama", "Alamat", "Nomor HP"};
+                for (String header : headers) {
+                    PdfPCell cell = new PdfPCell(new Phrase(header));
+                    cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+                    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    cell.setPadding(5);
+                    table.addCell(cell);
+                }
+                
+                // Tambahkan data anggota
+                for (Anggota member : memberTable.getItems()) {
+                    table.addCell(String.valueOf(member.getIdAnggota()));
+                    table.addCell(member.getNama());
+                    table.addCell(member.getAlamat());
+                    table.addCell(member.getNomorHp());
+                }
+                
+                document.add(table);
+                document.close();
+                
+                showSuccessAlert("Ekspor Berhasil", "Data telah diekspor ke PDF dengan sukses!");
+            } catch (Exception e) {
+                showAlert("Error", "Gagal mengekspor data: " + e.getMessage());
+            }
+        }
+    }
+
     private void setupTable() {
         idColumn.setCellValueFactory(new PropertyValueFactory<>("idAnggota"));
         namaColumn.setCellValueFactory(new PropertyValueFactory<>("nama"));
@@ -296,6 +353,34 @@ public class ManageMembersController implements Initializable {
             } catch (SQLException e) {
                 showAlert("Error", "Gagal menghapus anggota: " + e.getMessage());
             }
+        }
+    }
+
+    @FXML
+    private void handleEditMember(ActionEvent event) {
+        Anggota selectedMember = memberTable.getSelectionModel().getSelectedItem();
+        if (selectedMember == null) {
+            showAlert("Error", "Silakan pilih anggota yang ingin diedit.");
+            return;
+        }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/managementperpustakaan_javafx/UpdateMember.fxml"));
+            Parent root = loader.load();
+
+            // Pass the selected member to the UpdateMemberController
+            UpdateMemberController controller = loader.getController();
+            controller.setMember(selectedMember);
+
+            Stage stage = new Stage();
+            stage.setTitle("Edit Anggota");
+            stage.setScene(new Scene(root));
+            stage.show();
+
+            // Refresh the member table after the update window is closed
+            stage.setOnHidden(e -> loadMembers());
+        } catch (IOException e) {
+            showAlert("Error", "Gagal membuka form edit anggota: " + e.getMessage());
         }
     }
 

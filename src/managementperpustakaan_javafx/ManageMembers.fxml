@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- Mengimpor kelas yang diperlukan -->
+
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -27,7 +28,7 @@
                 <Button fx:id="manageBookBtn" maxWidth="Infinity" onAction="#handleManageBooks" styleClass="sidebar-button" text="Manajemen Buku" />
                 <Button fx:id="manageMemberBtn" maxWidth="Infinity" onAction="#handleManageMembers" styleClass="sidebar-button" text="Manajemen Anggota" />
                 <Button fx:id="manageBorrowBtn" maxWidth="Infinity" onAction="#handleManageBorrowing" styleClass="sidebar-button" text="Pinjaman" />
-                <Button fx:id="manageReturnBtn" onAction="#handleManageReturn" styleClass="sidebar-button" text="Pengembalian" />
+                <Button fx:id="manageReturnBtn" maxWidth="Infinity" onAction="#handleManageReturn" styleClass="sidebar-button" text="Pengembalian" />
                 <VBox VBox.vgrow="ALWAYS" />
                 <Button fx:id="logoutBtn" maxWidth="Infinity" onAction="#handleLogout" styleClass="logout-button" text="Keluar" />
             </VBox>
@@ -61,9 +62,12 @@
                                 </padding>
                                 <TextField fx:id="searchField" promptText="Cari anggota..." styleClass="search-field" />
                                 
-                                <Button fx:id="addButton" onAction="#handleAddMember" styleClass="action-button, add-button" text="Tambah Anggota" />
-                                <Button fx:id="deleteButton" onAction="#handleDeleteMember" styleClass="action-button delete-button" text="Hapus" />
-                                <Button fx:id="exportButton" onAction="#handleExportToExcel" styleClass="action-button, export-button" text="Ekspor ke Excel" />
+                                <HBox alignment="CENTER_RIGHT" spacing="10" HBox.hgrow="ALWAYS">
+                                    <Button fx:id="addButton" onAction="#handleAddMember" styleClass="action-button, add-button" text="Tambah Anggota" />
+                                    <Button fx:id="deleteButton" onAction="#handleDeleteMember" styleClass="action-button, delete-button" text="Hapus" />
+                                    <Button fx:id="editButton" onAction="#handleEditMember" styleClass="action-button, edit-button" text="Edit" />
+    <Button fx:id="exportButton" onAction="#handleExportToPDF" styleClass="action-button, export-button" text="Ekspor ke PDF" /> <!-- Tombol Ekspor -->
+                                </HBox>
                             </HBox>
                             
                             <!-- Area Tabel -->

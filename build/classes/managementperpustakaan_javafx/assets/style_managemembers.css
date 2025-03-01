@@ -46,7 +46,6 @@
     -fx-background-radius: 5px;
     -fx-cursor: hand;
     -fx-font-weight: bold;
-    -fx-graphic-text-gap: 8px;
 }
 
 .action-button:hover {
@@ -199,4 +198,14 @@
 
 .member-table .table-row-cell:selected .text {
     -fx-fill: white;
+}
+
+/* Tambahkan gaya untuk tombol edit */
+.edit-button {
+    -fx-background-color: #007bff;
+    -fx-text-fill: white;
+}
+
+.edit-button:hover {
+    -fx-background-color: #0056b3;
 }

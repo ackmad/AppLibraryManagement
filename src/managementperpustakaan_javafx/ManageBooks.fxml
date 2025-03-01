@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- Mengimpor kelas yang diperlukan -->
+
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
@@ -8,15 +9,13 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.MenuButton?>
-<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="720.0" prefWidth="1280.0" styleClass="mainFxmlClass" stylesheets="@assets/style_managebooks.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="managementperpustakaan_javafx.controller.ManageBooksController">
+<AnchorPane id="AnchorPane" prefHeight="720.0" prefWidth="1280.0" styleClass="mainFxmlClass" stylesheets="@assets/style_managebooks.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="managementperpustakaan_javafx.controller.ManageBooksController">
     <children>
         <HBox spacing="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
             <!-- Sidebar -->
@@ -29,7 +28,7 @@
                 <Button fx:id="manageBookBtn" maxWidth="Infinity" onAction="#handleManageBooks" styleClass="sidebar-button" text="Manajemen Buku" />
                 <Button fx:id="manageMemberBtn" maxWidth="Infinity" onAction="#handleManageMembers" styleClass="sidebar-button" text="Manajemen Anggota" />
                 <Button fx:id="manageBorrowBtn" maxWidth="Infinity" onAction="#handleManageBorrowing" styleClass="sidebar-button" text="Pinjaman" />
-                <Button fx:id="manageReturnBtn" onAction="#handleManageReturn" styleClass="sidebar-button" text="Pengembalian" />
+                <Button fx:id="manageReturnBtn" maxWidth="Infinity" onAction="#handleManageReturn" styleClass="sidebar-button" text="Pengembalian" />
                 <VBox VBox.vgrow="ALWAYS" />
                 <Button fx:id="logoutBtn" maxWidth="Infinity" onAction="#handleLogout" styleClass="logout-button" text="Keluar" />
             </VBox>
@@ -61,14 +60,15 @@
                                 <padding>
                                     <Insets bottom="10" left="10" right="10" top="10" />
                                 </padding>
-                                <HBox spacing="10" alignment="CENTER_LEFT">
+                                <HBox alignment="CENTER_LEFT" spacing="10">
                                     <TextField fx:id="searchField" onKeyReleased="#handleSearch" promptText="Cari buku..." styleClass="search-field" />
-                                    <ComboBox fx:id="searchCriteria" styleClass="search-combo" promptText="Cari berdasarkan..." />
+                                    <ComboBox fx:id="searchCriteria" prefHeight="38.0" prefWidth="191.0" promptText="Cari berdasarkan..." styleClass="search-combo" />
                                 </HBox>
                                 
-                                <HBox spacing="10" HBox.hgrow="ALWAYS" alignment="CENTER_RIGHT">
+                                <HBox alignment="CENTER_RIGHT" spacing="10" HBox.hgrow="ALWAYS">
                                     <Button fx:id="addButton" onAction="#handleAddBook" styleClass="action-button, add-button" text="Tambah Buku" />
-                                    <Button fx:id="handleDeleteBook" onAction="#handleDeleteBook" styleClass="action-button, delete-button" text="Hapus" />
+                                    <Button fx:id="deleteButton" onAction="#handleDeleteBook" styleClass="action-button, delete-button" text="Hapus" />
+                                    <Button fx:id="editButton" onAction="#handleEditBook" styleClass="action-button, edit-button" text="Edit" />
                                     <Button fx:id="exportButton" onAction="#handleExportToPDF" styleClass="action-button, export-button" text="Ekspor PDF" />
                                 </HBox>
                             </HBox>
@@ -76,12 +76,12 @@
                             <!-- Area Tabel -->
                             <TableView fx:id="bookTable" styleClass="book-table" VBox.vgrow="ALWAYS">
                                 <columns>
-                                    <TableColumn fx:id="idColumn" prefWidth="100" text="ID" />
-                                    <TableColumn fx:id="judulColumn" prefWidth="250" text="Judul" />
-                                    <TableColumn fx:id="penulisColumn" prefWidth="200" text="Penulis" />
-                                    <TableColumn fx:id="penerbitColumn" prefWidth="200" text="Penerbit" />
-                                    <TableColumn fx:id="tahunColumn" prefWidth="150" text="Tahun" />
-                                    <TableColumn fx:id="stokColumn" prefWidth="100" text="Stok" />
+                                    <TableColumn fx:id="idColumn" prefWidth="44.0" text="ID" />
+                                    <TableColumn fx:id="judulColumn" prefWidth="228.0" text="Judul" />
+                                    <TableColumn fx:id="penulisColumn" prefWidth="240.0" text="Penulis" />
+                                    <TableColumn fx:id="penerbitColumn" prefWidth="186.0" text="Penerbit" />
+                                    <TableColumn fx:id="tahunColumn" prefWidth="112.0" text="Tahun" />
+                                    <TableColumn fx:id="stokColumn" prefWidth="109.0" text="Stok" />
                                 </columns>
                             </TableView>
                         </VBox>
