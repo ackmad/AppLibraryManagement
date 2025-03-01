@@ -68,7 +68,7 @@
                                 
                                 <HBox spacing="10" HBox.hgrow="ALWAYS" alignment="CENTER_RIGHT">
                                     <Button fx:id="addButton" onAction="#handleAddBook" styleClass="action-button, add-button" text="Tambah Buku" />
-                                    <Button fx:id="deleteButton" onAction="#handleDeleteBook" styleClass="action-button, delete-button" text="Hapus" />
+                                    <Button fx:id="handleDeleteBook" onAction="#handleDeleteBook" styleClass="action-button, delete-button" text="Hapus" />
                                     <Button fx:id="exportButton" onAction="#handleExportToPDF" styleClass="action-button, export-button" text="Ekspor PDF" />
                                 </HBox>
                             </HBox>

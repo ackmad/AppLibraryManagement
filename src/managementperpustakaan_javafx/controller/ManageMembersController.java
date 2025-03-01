@@ -26,6 +26,7 @@ import javafx.stage.Stage;
 import javafx.scene.control.cell.PropertyValueFactory;
 import managementperpustakaan_javafx.controller.Koneksi;
 import managementperpustakaan_javafx.model.Anggota;
+import javafx.scene.control.ButtonType;
 
 /**
  * Kelas Controller FXML
@@ -201,21 +202,27 @@ public class ManageMembersController implements Initializable {
     }
 
     private void loadMembers() {
-        loadMembers("");
+        loadMembers(""); // Memanggil overload tanpa parameter
     }
 
     private void loadMembers(String search) {
         ObservableList<Anggota> members = FXCollections.observableArrayList();
         
-        String query = "SELECT * FROM anggota WHERE nama LIKE ? OR alamat LIKE ? OR nomor_hp LIKE ?";
+        String query = "SELECT * FROM anggota WHERE deleted_at IS NULL"; // Hanya ambil anggota yang tidak dihapus
+        
+        if (!search.isEmpty()) {
+            query += " AND (nama LIKE ? OR alamat LIKE ? OR nomor_hp LIKE ?)";
+        }
         
         try (Connection conn = Koneksi.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
             
-            String searchTerm = "%" + search + "%";
-            pstmt.setString(1, searchTerm);
-            pstmt.setString(2, searchTerm);
-            pstmt.setString(3, searchTerm);
+            if (!search.isEmpty()) {
+                String searchTerm = "%" + search + "%";
+                pstmt.setString(1, searchTerm);
+                pstmt.setString(2, searchTerm);
+                pstmt.setString(3, searchTerm);
+            }
             
             ResultSet rs = pstmt.executeQuery();
             
@@ -224,14 +231,15 @@ public class ManageMembersController implements Initializable {
                     rs.getInt("id_anggota"),
                     rs.getString("nama"),
                     rs.getString("alamat"),
-                    rs.getString("nomor_hp")
+                    rs.getString("nomor_hp"),
+                    rs.getTimestamp("deleted_at") // Ini akan selalu NULL untuk anggota yang ditampilkan
                 ));
             }
             
             memberTable.setItems(members);
             
         } catch (SQLException e) {
-            showAlert("Error", "Gagal memuat data anggota: " + e.getMessage());
+            showAlert("Error", "Failed to load members: " + e.getMessage());
         }
     }
 
@@ -262,26 +270,32 @@ public class ManageMembersController implements Initializable {
     }
 
     @FXML
-    private void handleDeleteMember() {
+    private void handleDeleteMember(ActionEvent event) {
         Anggota selectedMember = memberTable.getSelectionModel().getSelectedItem();
         if (selectedMember == null) {
-            showAlert("Error", "Pilih anggota yang akan dihapus!");
+            showAlert("Error", "Silakan pilih anggota yang ingin dihapus.");
             return;
         }
-        
-        String query = "DELETE FROM anggota WHERE id_anggota = ?";
-        
-        try (Connection conn = Koneksi.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(query)) {
-            
-            pstmt.setInt(1, selectedMember.getIdAnggota());
-            pstmt.executeUpdate();
-            
-            loadMembers();
-            showAlert("Sukses", "Anggota berhasil dihapus!");
-            
-        } catch (SQLException e) {
-            showAlert("Error", "Gagal menghapus anggota: " + e.getMessage());
+
+        // Konfirmasi penghapusan
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Konfirmasi Hapus");
+        alert.setHeaderText("Anda yakin ingin menghapus anggota ini?");
+        alert.setContentText("Nama Anggota: " + selectedMember.getNama());
+
+        if (alert.showAndWait().get() == ButtonType.OK) {
+            try (Connection conn = Koneksi.getConnection()) {
+                String query = "UPDATE anggota SET deleted_at = CURRENT_TIMESTAMP WHERE id_anggota = ?";
+                PreparedStatement pstmt = conn.prepareStatement(query);
+                pstmt.setInt(1, selectedMember.getIdAnggota());
+                pstmt.executeUpdate();
+
+                // Refresh the member table
+                loadMembers();
+                showSuccessAlert("Sukses", "Anggota berhasil dihapus.");
+            } catch (SQLException e) {
+                showAlert("Error", "Gagal menghapus anggota: " + e.getMessage());
+            }
         }
     }
 
@@ -293,6 +307,15 @@ public class ManageMembersController implements Initializable {
 
     private void showAlert(String title, String content) {
         Alert.AlertType type = title.equals("Error") ? Alert.AlertType.ERROR : Alert.AlertType.INFORMATION;
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
+
+    private void showSuccessAlert(String title, String content) {
+        Alert.AlertType type = Alert.AlertType.INFORMATION;
         Alert alert = new Alert(type);
         alert.setTitle(title);
         alert.setHeaderText(null);

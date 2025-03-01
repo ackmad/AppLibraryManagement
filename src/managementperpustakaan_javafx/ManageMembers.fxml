@@ -62,7 +62,7 @@
                                 <TextField fx:id="searchField" promptText="Cari anggota..." styleClass="search-field" />
                                 
                                 <Button fx:id="addButton" onAction="#handleAddMember" styleClass="action-button, add-button" text="Tambah Anggota" />
-                                <Button fx:id="deleteButton" onAction="#handleDeleteMember" styleClass="action-button, delete-button" text="Hapus" />
+                                <Button fx:id="deleteButton" onAction="#handleDeleteMember" styleClass="action-button delete-button" text="Hapus" />
                                 <Button fx:id="exportButton" onAction="#handleExportToExcel" styleClass="action-button, export-button" text="Ekspor ke Excel" />
                             </HBox>
                             

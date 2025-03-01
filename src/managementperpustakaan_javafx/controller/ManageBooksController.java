@@ -34,6 +34,7 @@ import com.itextpdf.text.pdf.*;
 import javafx.stage.FileChooser;
 import java.io.File;
 import java.io.FileOutputStream;
+import javafx.scene.control.ButtonType;
 
 /**
  * Kelas Controller FXML
@@ -210,7 +211,32 @@ public class ManageBooksController implements Initializable {
     // Method untuk menangani penghapusan buku
     @FXML
     private void handleDeleteBook(ActionEvent event) {
-        // Implementasi logika penghapusan buku
+        Buku selectedBook = bookTable.getSelectionModel().getSelectedItem();
+        if (selectedBook == null) {
+            showAlert("Error", "Silakan pilih buku yang ingin dihapus.");
+            return;
+        }
+
+        // Konfirmasi penghapusan
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Konfirmasi Hapus");
+        alert.setHeaderText("Anda yakin ingin menghapus buku ini?");
+        alert.setContentText("Judul Buku: " + selectedBook.getJudul());
+
+        if (alert.showAndWait().get() == ButtonType.OK) {
+            try (Connection conn = Koneksi.getConnection()) {
+                String query = "UPDATE buku SET deleted_at = CURRENT_TIMESTAMP WHERE id_buku = ?";
+                PreparedStatement pstmt = conn.prepareStatement(query);
+                pstmt.setInt(1, selectedBook.getIdBuku());
+                pstmt.executeUpdate();
+
+                // Refresh the book table
+                loadBooks();
+                showSuccessAlert("Sukses", "Buku berhasil dihapus.");
+            } catch (SQLException e) {
+                showAlert("Error", "Gagal menghapus buku: " + e.getMessage());
+            }
+        }
     }
     
     // Method untuk menangani export ke PDF
@@ -301,6 +327,9 @@ public class ManageBooksController implements Initializable {
         String searchBy = searchCriteria.getValue();
         String query = buildSearchQuery(searchBy);
         
+        // Tambahkan kondisi untuk memfilter buku yang tidak dihapus
+        query += " AND deleted_at IS NULL"; // Hanya ambil buku yang tidak dihapus
+        
         try (Connection conn = Koneksi.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
             
@@ -322,7 +351,10 @@ public class ManageBooksController implements Initializable {
                     rs.getString("penulis"),
                     rs.getString("penerbit"),
                     rs.getInt("tahun_terbit"),
-                    rs.getInt("stok")
+                    rs.getInt("stok"),
+                    rs.getTimestamp("created_at"),
+                    rs.getTimestamp("updated_at"),
+                    rs.getTimestamp("deleted_at")
                 ));
             }
             
@@ -336,17 +368,17 @@ public class ManageBooksController implements Initializable {
     private String buildSearchQuery(String searchBy) {
         switch (searchBy) {
             case "ID":
-                return "SELECT * FROM buku WHERE CAST(id_buku AS CHAR) LIKE ?";
+                return "SELECT * FROM buku WHERE CAST(id_buku AS CHAR) LIKE ? AND deleted_at IS NULL";
             case "Title":
-                return "SELECT * FROM buku WHERE judul LIKE ?";
+                return "SELECT * FROM buku WHERE judul LIKE ? AND deleted_at IS NULL";
             case "Author":
-                return "SELECT * FROM buku WHERE penulis LIKE ?";
+                return "SELECT * FROM buku WHERE penulis LIKE ? AND deleted_at IS NULL";
             case "Publisher":
-                return "SELECT * FROM buku WHERE penerbit LIKE ?";
+                return "SELECT * FROM buku WHERE penerbit LIKE ? AND deleted_at IS NULL";
             case "Year":
-                return "SELECT * FROM buku WHERE CAST(tahun_terbit AS CHAR) LIKE ?";
+                return "SELECT * FROM buku WHERE CAST(tahun_terbit AS CHAR) LIKE ? AND deleted_at IS NULL";
             default:
-                return "SELECT * FROM buku WHERE judul LIKE ? OR penulis LIKE ? OR penerbit LIKE ?";
+                return "SELECT * FROM buku WHERE (judul LIKE ? OR penulis LIKE ? OR penerbit LIKE ?) AND deleted_at IS NULL";
         }
     }
 
