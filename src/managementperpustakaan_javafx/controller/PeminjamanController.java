@@ -109,7 +109,7 @@ public class PeminjamanController implements Initializable {
         memberColumn.setCellValueFactory(new PropertyValueFactory<>("namaAnggota"));
         bookColumn.setCellValueFactory(new PropertyValueFactory<>("judulBuku"));
         borrowDateColumn.setCellValueFactory(new PropertyValueFactory<>("tanggalPinjam"));
-        returnDateColumn.setCellValueFactory(new PropertyValueFactory<>("tanggalJatuhTempo"));
+        returnDateColumn.setCellValueFactory(new PropertyValueFactory<>("tanggalKembali"));
         statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
     }
     
@@ -138,11 +138,13 @@ public class PeminjamanController implements Initializable {
     private void loadBorrowings() {
         ObservableList<Peminjaman> borrowings = FXCollections.observableArrayList();
         
-        String query = "SELECT p.*, a.nama as nama_anggota, b.judul as judul_buku " +
-                      "FROM peminjaman p " +
-                      "JOIN anggota a ON p.id_anggota = a.id_anggota " +
-                      "JOIN buku b ON p.id_buku = b.id_buku " +
-                      "ORDER BY p.tanggal_pinjam DESC";
+        String query = "SELECT peminjaman.id_peminjaman, peminjaman.id_anggota, peminjaman.id_buku, " +
+                      "peminjaman.tanggal_pinjam, peminjaman.tanggal_kembali, peminjaman.status, " +
+                      "anggota.nama as nama_anggota, buku.judul as judul_buku " +
+                      "FROM peminjaman " +
+                      "JOIN anggota ON peminjaman.id_anggota = anggota.id_anggota " +
+                      "JOIN buku ON peminjaman.id_buku = buku.id_buku " +
+                      "ORDER BY peminjaman.tanggal_pinjam DESC";
         
         try (Connection conn = Koneksi.getConnection();
              Statement stmt = conn.createStatement();
@@ -154,7 +156,7 @@ public class PeminjamanController implements Initializable {
                     rs.getInt("id_anggota"),
                     rs.getInt("id_buku"),
                     rs.getDate("tanggal_pinjam").toLocalDate(),
-                    rs.getDate("tanggal_jatuh_tempo").toLocalDate(),
+                    rs.getDate("tanggal_kembali").toLocalDate(),
                     rs.getString("status")
                 );
                 p.setNamaAnggota(rs.getString("nama_anggota"));
@@ -190,7 +192,7 @@ public class PeminjamanController implements Initializable {
                 int bookId = getBookId(conn, bookTitle);
                 
                 // Insert peminjaman
-                String insertQuery = "INSERT INTO peminjaman (id_anggota, id_buku, tanggal_pinjam, tanggal_jatuh_tempo, status) " +
+                String insertQuery = "INSERT INTO peminjaman (id_anggota, id_buku, tanggal_pinjam, tanggal_kembali, status) " +
                                    "VALUES (?, ?, ?, ?, 'Dipinjam')";
                 
                 try (PreparedStatement pstmt = conn.prepareStatement(insertQuery)) {

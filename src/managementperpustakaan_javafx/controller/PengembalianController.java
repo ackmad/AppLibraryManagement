@@ -74,53 +74,53 @@ public class PengembalianController implements Initializable {
     }    
     
     private void setupReturnTable() {
-        
         idPeminjamanColumn.setCellValueFactory(new PropertyValueFactory<>("idPeminjaman"));
         idAnggotaColumn.setCellValueFactory(new PropertyValueFactory<>("idAnggota"));
         namaAnggotaColumn.setCellValueFactory(new PropertyValueFactory<>("namaAnggota"));
         judulBukuColumn.setCellValueFactory(new PropertyValueFactory<>("judulBuku"));
         tanggalPinjamColumn.setCellValueFactory(new PropertyValueFactory<>("tanggalPinjam"));
-        tanggalJatuhTempoColumn.setCellValueFactory(new PropertyValueFactory<>("tanggalJatuhTempo"));
-        tanggalPengembalianColumn.setCellValueFactory(new PropertyValueFactory<>("tanggalPengembalian"));
+        tanggalJatuhTempoColumn.setCellValueFactory(new PropertyValueFactory<>("tanggalKembali"));
+        tanggalPengembalianColumn.setCellValueFactory(new PropertyValueFactory<>("tanggalKembaliAktual"));
         dendaColumn.setCellValueFactory(new PropertyValueFactory<>("denda"));
-        statusPengembalianColumn.setCellValueFactory(new PropertyValueFactory<>("statusPengembalian"));
+        statusPengembalianColumn.setCellValueFactory(new PropertyValueFactory<>("statusDenda"));
     }
 
-private void loadReturnData() {
-    String query = "SELECT p.id_peminjaman, p.id_anggota, a.nama AS nama_anggota, " +
-                   "b.id_buku, b.judul AS judul_buku, p.tanggal_pinjam, p.tanggal_jatuh_tempo, " +
-                   "p.tanggal_pengembalian, p.status AS status_pengembalian, " +
-                   "CASE WHEN p.tanggal_pengembalian IS NOT NULL AND p.tanggal_pengembalian > p.tanggal_jatuh_tempo " +
-                   "THEN DATEDIFF(p.tanggal_pengembalian, p.tanggal_jatuh_tempo) * 1000 ELSE 0 END AS denda " +
-                   "FROM peminjaman p " +
-                   "JOIN anggota a ON p.id_anggota = a.id_anggota " +
-                   "JOIN buku b ON p.id_buku = b.id_buku";
+    private void loadReturnData() {
+        String query = "SELECT peng.id_pengembalian, peng.id_peminjaman, peng.tanggal_kembali_aktual, " +
+                      "peng.denda, peng.status_denda, " +
+                      "p.id_anggota, p.tanggal_pinjam, p.tanggal_kembali, p.status, " +
+                      "a.nama AS nama_anggota, " +
+                      "b.id_buku, b.judul AS judul_buku " +
+                      "FROM pengembalian peng " +
+                      "LEFT JOIN peminjaman p ON peng.id_peminjaman = p.id_peminjaman " +
+                      "LEFT JOIN anggota a ON p.id_anggota = a.id_anggota " +
+                      "LEFT JOIN buku b ON p.id_buku = b.id_buku";
 
-    try (Connection conn = Koneksi.getConnection();
-         Statement stmt = conn.createStatement();
-         ResultSet rs = stmt.executeQuery(query)) {
+        try (Connection conn = Koneksi.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
 
-        ObservableList<Pengembalian> returnList = FXCollections.observableArrayList();
-        while (rs.next()) {
-            returnList.add(new Pengembalian(
-                rs.getInt("id_peminjaman"),
-                rs.getInt("id_anggota"),
-                rs.getString("nama_anggota"),
-                rs.getString("judul_buku"),
-                rs.getDate("tanggal_pinjam") != null ? rs.getDate("tanggal_pinjam").toLocalDate() : null,
-                rs.getDate("tanggal_jatuh_tempo") != null ? rs.getDate("tanggal_jatuh_tempo").toLocalDate() : null,
-                rs.getDate("tanggal_pengembalian") != null ? rs.getDate("tanggal_pengembalian").toLocalDate() : null,
-                rs.getDouble("denda"),
-                rs.getString("status_pengembalian"),
-                rs.getInt("id_buku")
-            ));
+            ObservableList<Pengembalian> returnList = FXCollections.observableArrayList();
+            while (rs.next()) {
+                returnList.add(new Pengembalian(
+                    rs.getInt("id_peminjaman"),
+                    rs.getInt("id_anggota"),
+                    rs.getString("nama_anggota"),
+                    rs.getString("judul_buku"),
+                    rs.getDate("tanggal_pinjam") != null ? rs.getDate("tanggal_pinjam").toLocalDate() : null,
+                    rs.getDate("tanggal_kembali") != null ? rs.getDate("tanggal_kembali").toLocalDate() : null,
+                    rs.getDate("tanggal_kembali_aktual") != null ? rs.getDate("tanggal_kembali_aktual").toLocalDate() : null,
+                    rs.getDouble("denda"),
+                    rs.getString("status_denda"),
+                    rs.getInt("id_buku")
+                ));
+            }
+            returnTable.setItems(returnList);
+
+        } catch (SQLException e) {
+            showAlert("Error", "Gagal memuat data pengembalian: " + e.getMessage());
         }
-        returnTable.setItems(returnList);
-
-    } catch (SQLException e) {
-        showAlert("Error", "Gagal memuat data pengembalian: " + e.getMessage());
     }
-}
 
     @FXML
     private void handleSearch() {
@@ -142,29 +142,48 @@ private void loadReturnData() {
     private void handleReturn() {
         Pengembalian selectedPengembalian = returnTable.getSelectionModel().getSelectedItem();
         if (selectedPengembalian != null) {
-            if ("Dikembalikan".equals(selectedPengembalian.getStatusPengembalian())) {
+            if (selectedPengembalian.getTanggalKembaliAktual() != null) {
                 showAlert("Info", "Buku ini sudah dikembalikan.");
                 return;
             }
 
-            // Set status pengembalian
-            selectedPengembalian.setStatusPengembalian("Dikembalikan");
+            try (Connection conn = Koneksi.getConnection()) {
+                conn.setAutoCommit(false);
+                try {
+                    // Insert into pengembalian table
+                    String insertQuery = "INSERT INTO pengembalian (id_peminjaman, tanggal_kembali_aktual, denda, status_denda) " +
+                                      "VALUES (?, CURDATE(), ?, 'Belum Lunas')";
+                    
+                    try (PreparedStatement pstmt = conn.prepareStatement(insertQuery)) {
+                        pstmt.setInt(1, selectedPengembalian.getIdPeminjaman());
+                        pstmt.setDouble(2, selectedPengembalian.getDenda());
+                        pstmt.executeUpdate();
+                    }
 
-            // Update stok buku
-            selectedPengembalian.updateBookStock(selectedPengembalian.getIdBuku()); 
+                    // Update peminjaman status
+                    String updateQuery = "UPDATE peminjaman SET status = 'Dikembalikan' WHERE id_peminjaman = ?";
+                    try (PreparedStatement pstmt = conn.prepareStatement(updateQuery)) {
+                        pstmt.setInt(1, selectedPengembalian.getIdPeminjaman());
+                        pstmt.executeUpdate();
+                    }
 
-            // Update database
-            try (Connection conn = Koneksi.getConnection();
-                 PreparedStatement pstmt = conn.prepareStatement(
-                     "UPDATE peminjaman SET status = ?, tanggal_pengembalian = CURDATE() WHERE id_peminjaman = ?")) {
-                pstmt.setString(1, selectedPengembalian.getStatusPengembalian());
-                pstmt.setInt(2, selectedPengembalian.getIdPeminjaman());
-                pstmt.executeUpdate();
+                    // Update book stock
+                    String updateStockQuery = "UPDATE buku SET stok = stok + 1 WHERE id_buku = ?";
+                    try (PreparedStatement pstmt = conn.prepareStatement(updateStockQuery)) {
+                        pstmt.setInt(1, selectedPengembalian.getIdBuku());
+                        pstmt.executeUpdate();
+                    }
+
+                    conn.commit();
+                    showAlert("Sukses", "Buku berhasil dikembalikan!");
+                    loadReturnData();
+                } catch (SQLException e) {
+                    conn.rollback();
+                    throw e;
+                }
             } catch (SQLException e) {
-                showAlert("Error", "Gagal mengupdate status pengembalian: " + e.getMessage());
+                showAlert("Error", "Gagal mengembalikan buku: " + e.getMessage());
             }
-
-            loadReturnData(); // Refresh data tabel
         }
     }
 

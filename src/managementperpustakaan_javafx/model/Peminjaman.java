@@ -3,17 +3,11 @@ package managementperpustakaan_javafx.model;
 import java.time.LocalDate;
 
 public class Peminjaman {
-    
-    private int id_peminjaman;
-    private String nama;
-    private String judul;
-    private LocalDate tanggal_pinjam;
-
-       private int idPeminjaman;
+    private int idPeminjaman;
     private int idAnggota;
     private int idBuku;
     private LocalDate tanggalPinjam;
-    private LocalDate tanggalJatuhTempo;
+    private LocalDate tanggalKembali;
     private String status;
     
     // Additional fields for UI display
@@ -21,20 +15,13 @@ public class Peminjaman {
     private String judulBuku;
 
     public Peminjaman(int idPeminjaman, int idAnggota, int idBuku, LocalDate tanggalPinjam, 
-                      LocalDate tanggalJatuhTempo, String status) {
+                      LocalDate tanggalKembali, String status) {
         this.idPeminjaman = idPeminjaman;
         this.idAnggota = idAnggota;
         this.idBuku = idBuku;
         this.tanggalPinjam = tanggalPinjam;
-        this.tanggalJatuhTempo = tanggalJatuhTempo;
+        this.tanggalKembali = tanggalKembali;
         this.status = status;
-    }
-
-    public Peminjaman(int id_peminjaman, String nama, String judul, LocalDate tanggal_pinjam) {
-        this.id_peminjaman = id_peminjaman;
-        this.nama = nama;
-        this.judul = judul;
-        this.tanggal_pinjam = tanggal_pinjam;
     }
 
     // Getters
@@ -42,7 +29,7 @@ public class Peminjaman {
     public int getIdAnggota() { return idAnggota; }
     public int getIdBuku() { return idBuku; }
     public LocalDate getTanggalPinjam() { return tanggalPinjam; }
-    public LocalDate getTanggalJatuhTempo() { return tanggalJatuhTempo; }
+    public LocalDate getTanggalKembali() { return tanggalKembali; }
     public String getStatus() { return status; }
     public String getNamaAnggota() { return namaAnggota; }
     public String getJudulBuku() { return judulBuku; }
@@ -52,9 +39,8 @@ public class Peminjaman {
     public void setIdAnggota(int idAnggota) { this.idAnggota = idAnggota; }
     public void setIdBuku(int idBuku) { this.idBuku = idBuku; }
     public void setTanggalPinjam(LocalDate tanggalPinjam) { this.tanggalPinjam = tanggalPinjam; }
-    public void setTanggalJatuhTempo(LocalDate tanggalJatuhTempo) { this.tanggalJatuhTempo = tanggalJatuhTempo; }
+    public void setTanggalKembali(LocalDate tanggalKembali) { this.tanggalKembali = tanggalKembali; }
     public void setStatus(String status) { this.status = status; }
     public void setNamaAnggota(String namaAnggota) { this.namaAnggota = namaAnggota; }
     public void setJudulBuku(String judulBuku) { this.judulBuku = judulBuku; }
-
-} 
+}
