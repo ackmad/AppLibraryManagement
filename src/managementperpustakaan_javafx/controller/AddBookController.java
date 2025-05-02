@@ -87,7 +87,7 @@ public class AddBookController implements Initializable {
     }
     
     private void saveBook() {
-        String sql = "INSERT INTO buku (id_buku, judul, penulis, penerbit, tahun_terbit, stok) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO buku (kode_buku, judul, penulis, penerbit, tahun_terbit, stok) VALUES (?, ?, ?, ?, ?, ?)";
         
         try (Connection conn = Koneksi.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {

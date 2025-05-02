@@ -42,7 +42,7 @@
                     <Button fx:id="searchButton" onAction="#handleSearch" prefHeight="38.0" prefWidth="98.0" styleClass="action-button" text="Cari" />
                 </HBox>
                 
-                <TableView fx:id="returnTable" styleClass="return-table" VBox.vgrow="ALWAYS">
+                <TableView fx:id="returnTable" styleClass="return-table" VBox.vgrow="ALWAYS" onMouseClicked="#handleRowClick">
                     <columns>
                         <TableColumn fx:id="idPengembalianColumn" minWidth="0.0" prefWidth="0.0" text="ID Peng" />
                         <TableColumn fx:id="idPeminjamanColumn" prefWidth="69.0" text="ID Pem" />

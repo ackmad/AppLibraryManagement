@@ -23,6 +23,8 @@ import managementperpustakaan_javafx.controller.Koneksi;
 import managementperpustakaan_javafx.model.Pengembalian;
 import java.io.IOException;
 import javafx.collections.transformation.FilteredList;
+import java.time.LocalDate;
+import java.sql.Date;
 
 /**
  * Kelas Controller FXML
@@ -86,15 +88,15 @@ public class PengembalianController implements Initializable {
     }
 
     private void loadReturnData() {
-        String query = "SELECT peng.id_pengembalian, peng.id_peminjaman, peng.tanggal_kembali_aktual, " +
-                      "peng.denda, peng.status_denda, " +
-                      "p.id_anggota, p.tanggal_pinjam, p.tanggal_kembali, p.status, " +
+        String query = "SELECT p.id_peminjaman, p.id_anggota, p.id_buku, " +
+                      "p.tanggal_pinjam, p.tanggal_kembali, p.status, " +
                       "a.nama AS nama_anggota, " +
-                      "b.id_buku, b.judul AS judul_buku " +
-                      "FROM pengembalian peng " +
-                      "LEFT JOIN peminjaman p ON peng.id_peminjaman = p.id_peminjaman " +
-                      "LEFT JOIN anggota a ON p.id_anggota = a.id_anggota " +
-                      "LEFT JOIN buku b ON p.id_buku = b.id_buku";
+                      "b.judul AS judul_buku " +
+                      "FROM peminjaman p " +
+                      "JOIN anggota a ON p.id_anggota = a.id_anggota " +
+                      "JOIN buku b ON p.id_buku = b.id_buku " +
+                      "WHERE p.status = 'Dipinjam' " +
+                      "ORDER BY p.tanggal_pinjam DESC";
 
         try (Connection conn = Koneksi.getConnection();
              Statement stmt = conn.createStatement();
@@ -102,23 +104,32 @@ public class PengembalianController implements Initializable {
 
             ObservableList<Pengembalian> returnList = FXCollections.observableArrayList();
             while (rs.next()) {
+                // Hitung denda
+                LocalDate tanggalKembali = rs.getDate("tanggal_kembali").toLocalDate();
+                LocalDate today = LocalDate.now();
+                long selisihHari = 0;
+                if (today.isAfter(tanggalKembali)) {
+                    selisihHari = java.time.temporal.ChronoUnit.DAYS.between(tanggalKembali, today);
+                }
+                double denda = selisihHari * 5000; // Denda 5000 per hari
+
                 returnList.add(new Pengembalian(
                     rs.getInt("id_peminjaman"),
                     rs.getInt("id_anggota"),
                     rs.getString("nama_anggota"),
                     rs.getString("judul_buku"),
-                    rs.getDate("tanggal_pinjam") != null ? rs.getDate("tanggal_pinjam").toLocalDate() : null,
-                    rs.getDate("tanggal_kembali") != null ? rs.getDate("tanggal_kembali").toLocalDate() : null,
-                    rs.getDate("tanggal_kembali_aktual") != null ? rs.getDate("tanggal_kembali_aktual").toLocalDate() : null,
-                    rs.getDouble("denda"),
-                    rs.getString("status_denda"),
+                    rs.getDate("tanggal_pinjam").toLocalDate(),
+                    rs.getDate("tanggal_kembali").toLocalDate(),
+                    null, // tanggal_kembali_aktual belum ada
+                    denda,
+                    "Belum Lunas",
                     rs.getInt("id_buku")
                 ));
             }
             returnTable.setItems(returnList);
 
         } catch (SQLException e) {
-            showAlert("Error", "Gagal memuat data pengembalian: " + e.getMessage());
+            showAlert("Error", "Gagal memuat data peminjaman: " + e.getMessage());
         }
     }
 
@@ -142,21 +153,20 @@ public class PengembalianController implements Initializable {
     private void handleReturn() {
         Pengembalian selectedPengembalian = returnTable.getSelectionModel().getSelectedItem();
         if (selectedPengembalian != null) {
-            if (selectedPengembalian.getTanggalKembaliAktual() != null) {
-                showAlert("Info", "Buku ini sudah dikembalikan.");
-                return;
-            }
-
             try (Connection conn = Koneksi.getConnection()) {
                 conn.setAutoCommit(false);
                 try {
+                    LocalDate today = LocalDate.now();
+                    
                     // Insert into pengembalian table
                     String insertQuery = "INSERT INTO pengembalian (id_peminjaman, tanggal_kembali_aktual, denda, status_denda) " +
-                                      "VALUES (?, CURDATE(), ?, 'Belum Lunas')";
+                                      "VALUES (?, ?, ?, ?)";
                     
                     try (PreparedStatement pstmt = conn.prepareStatement(insertQuery)) {
                         pstmt.setInt(1, selectedPengembalian.getIdPeminjaman());
-                        pstmt.setDouble(2, selectedPengembalian.getDenda());
+                        pstmt.setDate(2, Date.valueOf(today));
+                        pstmt.setDouble(3, selectedPengembalian.getDenda());
+                        pstmt.setString(4, selectedPengembalian.getDenda() > 0 ? "Belum Lunas" : "Lunas");
                         pstmt.executeUpdate();
                     }
 
@@ -167,15 +177,12 @@ public class PengembalianController implements Initializable {
                         pstmt.executeUpdate();
                     }
 
-                    // Update book stock
-                    String updateStockQuery = "UPDATE buku SET stok = stok + 1 WHERE id_buku = ?";
-                    try (PreparedStatement pstmt = conn.prepareStatement(updateStockQuery)) {
-                        pstmt.setInt(1, selectedPengembalian.getIdBuku());
-                        pstmt.executeUpdate();
-                    }
-
                     conn.commit();
-                    showAlert("Sukses", "Buku berhasil dikembalikan!");
+                    String message = "Buku berhasil dikembalikan!";
+                    if (selectedPengembalian.getDenda() > 0) {
+                        message += "\nDenda yang harus dibayar: Rp " + String.format("%,.0f", selectedPengembalian.getDenda());
+                    }
+                    showSuccessAlert("Sukses", message);
                     loadReturnData();
                 } catch (SQLException e) {
                     conn.rollback();
@@ -225,6 +232,14 @@ public class PengembalianController implements Initializable {
         alert.showAndWait();
     }
 
+    private void showSuccessAlert(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
+
     private void loadScene(ActionEvent event, String fxmlPath, String title) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource(fxmlPath));
@@ -235,6 +250,14 @@ public class PengembalianController implements Initializable {
             stage.show();
         } catch (Exception e) {
             showAlert("Error", "Failed to load scene: " + e.getMessage());
+        }
+    }
+
+    @FXML
+    private void handleRowClick() {
+        Pengembalian selectedPengembalian = returnTable.getSelectionModel().getSelectedItem();
+        if (selectedPengembalian != null) {
+            handleReturn();
         }
     }
 }

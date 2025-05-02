@@ -202,14 +202,7 @@ public class PeminjamanController implements Initializable {
                     pstmt.setDate(4, Date.valueOf(returnDate));
                     pstmt.executeUpdate();
                 }
-                
-                // Update book stock
-                String updateQuery = "UPDATE buku SET stok = stok - 1 WHERE id_buku = ?";
-                try (PreparedStatement pstmt = conn.prepareStatement(updateQuery)) {
-                    pstmt.setInt(1, bookId);
-                    pstmt.executeUpdate();
-                }
-                
+                                
                 conn.commit();
                 loadBorrowings();
                 clearFields();
