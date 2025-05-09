@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- Mengimpor kelas yang diperlukan -->
+
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane id="AnchorPane" prefHeight="300" prefWidth="400" stylesheets="@assets/style_login.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="managementperpustakaan_javafx.controller.LoginController">
     <children>
@@ -17,5 +19,10 @@
         <Button fx:id="loginButton" layoutX="150.0" layoutY="180.0" onAction="#handleLogin" styleClass="login-button" text="Masuk" />
 
         <Label fx:id="statusLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="100.0" layoutY="226.0" prefHeight="18.0" prefWidth="200.0" styleClass="status-label" text="" textAlignment="CENTER" />
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="20.0" layoutY="257.0" prefHeight="18.0" prefWidth="35.0" styleClass="title" text="V.2">
+         <font>
+            <Font name="Andale Mono" size="7.0" />
+         </font>
+      </Label>
     </children>
 </AnchorPane>
